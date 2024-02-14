@@ -3,13 +3,14 @@ const player = document.querySelector('img.player');
 const button = document.querySelector('button');
 
 
+// !!cssの値の取得が上手くいかなかったため、cssに対応する値を手入力!!
 const position = {
     // スクリーン
-    screen : {width : background.style.width, height : background.style.height},
+    screen : {x : 0, y : 0, width : 1000, height : 600},
     // ブロック
-    block : [{x : 0, y : 0, width : 0, height : 0}, {x : 0, y : 0, width : 0, height : 0}, {x : 0, y : 0, width : 0, height : 0}, {x : 0, y : 0, width : 0, height : 0}],
+    block : [{x : 0, y : 560, width : 1000, height : 40}, {x : 200, y : 380, width : 200, height : 40}, {x : 600, y : 380, width : 200, height : 40}, {x : 400, y : 200, width : 200, height : 40}],
     // プレイヤー
-    player : {x : player.style.left, y : player.style.top, width : player.style.width, height : player.style.height},
+    player : {x : 270, y : 480, width : 60, height : 80},
     // 敵
     enemy : {x : 0, y : 0, width : 0, height : 0},
     // 攻撃判定
@@ -42,19 +43,14 @@ const position = {
 };
 
 
-let posTop = 0;
-let posLeft = 0;
-
-
-
-
 const moveRight = () => {
-    position.player.x -= 5;
+    console.log(position.player.x);
+    position.player.x += 5;
     player.style.left = position.player.x + 'px';
 } 
 
 const moveLeft = () => {
-    position.player.x += 5;
+    position.player.x -= 5;
     player.style.left = position.player.x + 'px';
 } 
 
@@ -64,10 +60,10 @@ const moveLeft = () => {
 
 document.body.addEventListener('keydown', (event) => {
     if (event.code === 'KeyA') {
-        moveRight();
+        moveLeft();
     }
     if (event.code === 'KeyD') {
-        moveLeft();
+        moveRight();
     }
 });
 

@@ -6,19 +6,54 @@
 }
 
 img.background {
-    position:absolute;
-    top:0px;
-    left:0px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
     width: 1000px; 
     height: 600px;
     z-index: 1;
 }
 
 img.player {
-    position:absolute;
-    top:0px;
-    left:0px;
+    position: absolute;
+    top: 480px;
+    left: 270px;
     width: 60px; 
     height: 80px;
+    z-index: 3;
+}
+
+img.block0 {
+    position: absolute;
+    top: 560px;
+    left: 0px;
+    width: 1000px; 
+    height: 40px;
+    z-index: 2;
+}
+
+img.block1 {
+    position: absolute;
+    top: 380px;
+    left: 200px;
+    width: 200px; 
+    height: 40px;
+    z-index: 2;
+}
+
+img.block2 {
+    position: absolute;
+    top: 380px;
+    left: 600px;
+    width: 200px; 
+    height: 40px;
+    z-index: 2;
+}
+img.block3 {
+    position: absolute;
+    top: 200px;
+    left: 400px;
+    width: 200px; 
+    height: 40px;
     z-index: 2;
 }
