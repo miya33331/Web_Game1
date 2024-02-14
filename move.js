@@ -42,21 +42,40 @@ const position = {
     }
 };
 
+let v = 0;
+let d_t = 0;
+let jump = false;
+const g = 10;
+
+const gravity = () => {
+    if (!jump) {
+        if (position.overlap(position.player, position.block[0]) || position.overlap(position.player, position.block[1]) || position.overlap(position.player, position.block[2]) || position.overlap(position.player, position.block[3])){
+            v = 0;
+            d_t = 0;
+            return;
+        }
+    }
+    console.log(position.player.y)
+    position.player.y -= v - g * d_t;
+    player.style.top = position.player.y + 'px';
+    d_t += 0.1;
+    jump = false;
+};
 
 const moveRight = () => {
-    console.log(position.player.x);
     position.player.x += 5;
     player.style.left = position.player.x + 'px';
-} 
+}; 
 
 const moveLeft = () => {
     position.player.x -= 5;
     player.style.left = position.player.x + 'px';
-} 
+};
 
-// let interval;
-// button.addEventListener('mousedown', () => {interval = setInterval(movefunc, 20)});
-// button.addEventListener('mouseup', () => {clearInterval(interval)});
+
+let intervalID;
+
+intervalID = setInterval(gravity, 100);
 
 document.body.addEventListener('keydown', (event) => {
     if (event.code === 'KeyA') {
@@ -65,5 +84,12 @@ document.body.addEventListener('keydown', (event) => {
     if (event.code === 'KeyD') {
         moveRight();
     }
+    if (event.code === 'Space') {
+        v = 20;
+        jump = true;
+    }
 });
 
+// clearInterval(intervalID);
+
+setInterval(() => {console.log('1');}, 1000);
