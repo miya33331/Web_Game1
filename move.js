@@ -45,21 +45,27 @@ const position = {
 let v = 0;
 let d_t = 0;
 let jump = false;
-const g = 10;
+let doublejump1 = false;
+let doublejump2 = true;
+const g = 25;
 
 const gravity = () => {
     if (!jump) {
         if (position.overlap(position.player, position.block[0]) || position.overlap(position.player, position.block[1]) || position.overlap(position.player, position.block[2]) || position.overlap(position.player, position.block[3])){
             v = 0;
             d_t = 0;
+            doublejump1 = false;
+            doublejump2 = true;
             return;
         }
     }
+
     console.log(position.player.y)
     position.player.y -= v - g * d_t;
     player.style.top = position.player.y + 'px';
-    d_t += 0.1;
+    d_t += 0.04;
     jump = false;
+    doublejump1 = true;
 };
 
 const moveRight = () => {
@@ -75,7 +81,7 @@ const moveLeft = () => {
 
 let intervalID;
 
-intervalID = setInterval(gravity, 100);
+intervalID = setInterval(gravity, 40);
 
 document.body.addEventListener('keydown', (event) => {
     if (event.code === 'KeyA') {
@@ -87,6 +93,10 @@ document.body.addEventListener('keydown', (event) => {
     if (event.code === 'Space') {
         v = 20;
         jump = true;
+        if (doublejump1 && doublejump2) {
+            d_t = 0;
+            doublejump2 = false;
+        }
     }
 });
 
