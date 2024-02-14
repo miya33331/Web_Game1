@@ -18,6 +18,31 @@ const position = {
     // 重なり判定
     overlap : (obj1, obj2) => {
         for (let i = 0; i < 2; i++) {
+            if (obj1.x < obj2.x && obj2.x < obj1.x + obj1.width) {
+                if (obj1.y < obj2.y && obj2.y < obj1.y + obj1.height){
+                    return true;
+                }
+                if (obj1.y < obj2.y + obj2.height && obj2.y + obj2.height < obj1.y + obj1.height){
+                    return true;
+                }
+            }
+            if (obj1.x < obj2.x + obj2.width && obj2.x + obj2.width < obj1.x + obj1.width) {
+                if (obj1.y < obj2.y && obj2.y < obj1.y + obj1.height){
+                    return true;
+                }
+                if (obj1.y < obj2.y + obj2.height && obj2.y + obj2.height < obj1.y + obj1.height){
+                    return true;
+                }
+            }
+            const tmp = obj1;
+            obj1 = obj2;
+            obj2 = tmp;
+        }
+        return false;
+    },
+    // 重なり判定(=を含む)
+    overlapEqual : (obj1, obj2) => {
+        for (let i = 0; i < 2; i++) {
             if (obj1.x <= obj2.x && obj2.x <= obj1.x + obj1.width) {
                 if (obj1.y <= obj2.y && obj2.y <= obj1.y + obj1.height){
                     return true;
@@ -51,17 +76,29 @@ const g = 25;
 
 const gravity = () => {
     if (!jump) {
-        if (position.overlap(position.player, position.block[0]) || position.overlap(position.player, position.block[1]) || position.overlap(position.player, position.block[2]) || position.overlap(position.player, position.block[3])){
+        if (position.overlapEqual(position.player, position.block[0]) || position.overlapEqual(position.player, position.block[1]) || position.overlapEqual(position.player, position.block[2]) || position.overlapEqual(position.player, position.block[3])){
             if (v - g * d_t > 0) {
                 v = -((v - g * d_t) * 0.5);
                 d_t = 0;
-                position.player.y += 10;
+
+                for (let posblock of position.block) {
+                    if (position.overlap(position.player, posblock)) {
+                        position.player.y = posblock.y + posblock.height;
+                    }
+                }
+
                 player.style.top = position.player.y + 'px';
             }
             else {
                 v = 0;
                 d_t = 0;
-                position.player.y -= 0.05;
+
+                for (let posblock of position.block) {
+                    if (position.overlap(position.player, posblock)) {
+                        position.player.y = posblock.y - position.player.height;
+                    }
+                }
+
                 player.style.top = position.player.y + 'px';
                 doublejump1 = false;
                 doublejump2 = true;
@@ -79,12 +116,22 @@ const gravity = () => {
 };
 
 const moveRight = () => {
-    position.player.x += 5;
+    if (position.overlap(position.player, position.block[0]) || position.overlap(position.player, position.block[1]) || position.overlap(position.player, position.block[2]) || position.overlap(position.player, position.block[3])){
+        position.player.x -= 5;
+        player.style.left = position.player.x + 'px';
+        return;
+    }
+    position.player.x += 3;
     player.style.left = position.player.x + 'px';
 }; 
 
 const moveLeft = () => {
-    position.player.x -= 5;
+    if (position.overlap(position.player, position.block[0]) || position.overlap(position.player, position.block[1]) || position.overlap(position.player, position.block[2]) || position.overlap(position.player, position.block[3])){
+        position.player.x += 5;
+        player.style.left = position.player.x + 'px';
+        return;
+    }
+    position.player.x -= 3;
     player.style.left = position.player.x + 'px';
 };
 
@@ -104,6 +151,7 @@ document.body.addEventListener('keydown', (event) => {
         v = 20;
         jump = true;
         if (doublejump1 && doublejump2) {
+            v = 15;
             d_t = 0;
             doublejump2 = false;
         }
