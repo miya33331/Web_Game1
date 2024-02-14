@@ -52,11 +52,21 @@ const g = 25;
 const gravity = () => {
     if (!jump) {
         if (position.overlap(position.player, position.block[0]) || position.overlap(position.player, position.block[1]) || position.overlap(position.player, position.block[2]) || position.overlap(position.player, position.block[3])){
-            v = 0;
-            d_t = 0;
-            doublejump1 = false;
-            doublejump2 = true;
-            return;
+            if (v - g * d_t > 0) {
+                v = -((v - g * d_t) * 0.5);
+                d_t = 0;
+                position.player.y += 10;
+                player.style.top = position.player.y + 'px';
+            }
+            else {
+                v = 0;
+                d_t = 0;
+                position.player.y -= 0.05;
+                player.style.top = position.player.y + 'px';
+                doublejump1 = false;
+                doublejump2 = true;
+                return;
+            }
         }
     }
 
