@@ -7,13 +7,24 @@ let posLeft = 0;
 
 let interval;
 
-const movefunc = () => {
-    posTop = posTop + 1;
-    posLeft = posLeft + 3;
-
-    player.style.top  = posTop + 'px'; 
+const moveRight = () => {
+    posLeft = posLeft + 5;
     player.style.left = posLeft + 'px';
 } 
 
-button.addEventListener('mousedown', () => {interval = setInterval(movefunc, 20)});
-button.addEventListener('mouseup', () => {clearInterval(interval)});
+const moveLeft = () => {
+    posLeft = posLeft - 5;
+    player.style.left = posLeft + 'px';
+} 
+
+// button.addEventListener('mousedown', () => {interval = setInterval(movefunc, 20)});
+// button.addEventListener('mouseup', () => {clearInterval(interval)});
+
+document.body.addEventListener('keydown', (event) => {
+    if (event.code === 'KeyA') {
+        moveRight();
+    }
+    if (event.code === 'KeyD') {
+        moveLeft();
+    }
+});
