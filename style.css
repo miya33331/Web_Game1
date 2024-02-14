@@ -9,6 +9,8 @@ img.background {
     position:absolute;
     top:0px;
     left:0px;
+    width: 1000px; 
+    height: 600px;
     z-index: 1;
 }
 
@@ -16,5 +18,7 @@ img.player {
     position:absolute;
     top:0px;
     left:0px;
+    width: 60px; 
+    height: 80px;
     z-index: 2;
 }

@@ -1,41 +1,15 @@
+const background = document.querySelector('img.background');
 const player = document.querySelector('img.player');
 const button = document.querySelector('button');
-const p = document.querySelector('p,text');
 
-let posTop = 0;
-let posLeft = 0;
-
-let interval;
-
-const moveRight = () => {
-    posLeft = posLeft + 5;
-    player.style.left = posLeft + 'px';
-} 
-
-const moveLeft = () => {
-    posLeft = posLeft - 5;
-    player.style.left = posLeft + 'px';
-} 
-
-// button.addEventListener('mousedown', () => {interval = setInterval(movefunc, 20)});
-// button.addEventListener('mouseup', () => {clearInterval(interval)});
-
-document.body.addEventListener('keydown', (event) => {
-    if (event.code === 'KeyA') {
-        moveRight();
-    }
-    if (event.code === 'KeyD') {
-        moveLeft();
-    }
-});
 
 const position = {
     // スクリーン
-    screen : {width : 0, height : 0},
+    screen : {width : background.style.width, height : background.style.height},
     // ブロック
     block : [{x : 0, y : 0, width : 0, height : 0}, {x : 0, y : 0, width : 0, height : 0}, {x : 0, y : 0, width : 0, height : 0}, {x : 0, y : 0, width : 0, height : 0}],
     // プレイヤー
-    player : {x : 0, y : 0, width : 0, height : 0},
+    player : {x : player.style.left, y : player.style.top, width : player.style.width, height : player.style.height},
     // 敵
     enemy : {x : 0, y : 0, width : 0, height : 0},
     // 攻撃判定
@@ -66,3 +40,34 @@ const position = {
         return false;
     }
 };
+
+
+let posTop = 0;
+let posLeft = 0;
+
+
+
+
+const moveRight = () => {
+    position.player.x -= 5;
+    player.style.left = position.player.x + 'px';
+} 
+
+const moveLeft = () => {
+    position.player.x += 5;
+    player.style.left = position.player.x + 'px';
+} 
+
+// let interval;
+// button.addEventListener('mousedown', () => {interval = setInterval(movefunc, 20)});
+// button.addEventListener('mouseup', () => {clearInterval(interval)});
+
+document.body.addEventListener('keydown', (event) => {
+    if (event.code === 'KeyA') {
+        moveRight();
+    }
+    if (event.code === 'KeyD') {
+        moveLeft();
+    }
+});
+
