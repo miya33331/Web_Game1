@@ -6,11 +6,13 @@ const button = document.querySelector('button');
 // !!cssの値の取得が上手くいかなかったため、cssに対応する値を手入力!!
 const position = {
     // スクリーン
-    screen : {x : 0, y : 0, width : 1000, height : 600},
+    screen : {x : 0, y : 0, width : 1000, height : 830},
     // ブロック
-    block : [{x : 0, y : 560, width : 1000, height : 40}, {x : 200, y : 380, width : 200, height : 40}, {x : 600, y : 380, width : 200, height : 40}, {x : 400, y : 200, width : 200, height : 40}],
+    block : [{x : 0, y : 790, width : 1000, height : 40}, {x : 200, y : 610, width : 200, height : 40}, {x : 600, y : 610, width : 200, height : 40}, {x : 400, y : 430, width : 200, height : 40}],
+    // 壁
+    wall : [{x : -10, y : 0, width : 20, height : 830}, {x : 1000, y : 0, width : 20, height : 830}],
     // プレイヤー
-    player : {x : 270, y : 480, width : 60, height : 80},
+    player : {x : 270, y : 530, width : 60, height : 80},
     // 敵
     enemy : {x : 0, y : 0, width : 0, height : 0},
     // 攻撃判定
@@ -115,23 +117,58 @@ const gravity = () => {
     doublejump1 = true;
 };
 
+
 const moveRight = () => {
-    if (position.overlap(position.player, position.block[0]) || position.overlap(position.player, position.block[1]) || position.overlap(position.player, position.block[2]) || position.overlap(position.player, position.block[3])){
-        position.player.x -= 5;
+    if (position.overlap(position.player, position.block[0]) || position.overlap(position.player, position.block[1]) || position.overlap(position.player, position.block[2]) || position.overlap(position.player, position.block[3]) || position.overlap(position.player, position.wall[0]) || position.overlap(position.player, position.wall[1])){
+        for (let posblock of position.block) {
+            if (position.overlap(position.player, posblock)) {
+                position.player.x = posblock.x - posblock.width - 1;
+            }
+        }
+        for (let poswall of position.wall) {
+            if (position.overlap(position.player, poswall)) {
+                position.player.x = poswall.x - poswall.width;
+            }
+        }
+
         player.style.left = position.player.x + 'px';
         return;
     }
-    position.player.x += 3;
+    else{
+        for (let poswall of position.wall) {
+            if (position.overlapEqual(position.player, poswall) && position.player.x + position.player.width === poswall.x) {
+                return;
+            }
+        }
+    }
+    position.player.x += 6;
     player.style.left = position.player.x + 'px';
 }; 
 
 const moveLeft = () => {
-    if (position.overlap(position.player, position.block[0]) || position.overlap(position.player, position.block[1]) || position.overlap(position.player, position.block[2]) || position.overlap(position.player, position.block[3])){
-        position.player.x += 5;
+    if (position.overlap(position.player, position.block[0]) || position.overlap(position.player, position.block[1]) || position.overlap(position.player, position.block[2]) || position.overlap(position.player, position.block[3]) || position.overlap(position.player, position.wall[0]) || position.overlap(position.player, position.wall[1])){
+        for (let posblock of position.block) {
+            if (position.overlap(position.player, posblock)) {
+                position.player.x = posblock.x + posblock.width + 1;
+            }
+        }
+        for (let poswall of position.wall) {
+            if (position.overlap(position.player, poswall)) {
+                position.player.x = poswall.x + poswall.width;
+            }
+        }
+
         player.style.left = position.player.x + 'px';
         return;
     }
-    position.player.x -= 3;
+    else{
+        for (let poswall of position.wall) {
+            if (position.overlapEqual(position.player, poswall) && position.player.x === poswall.x + poswall.width ) {
+                return;
+            }
+        }
+    }
+    position.player.x -= 6;
     player.style.left = position.player.x + 'px';
 };
 
