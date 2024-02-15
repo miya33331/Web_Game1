@@ -1,5 +1,6 @@
 const background = document.querySelector('img.background');
 const player = document.querySelector('img.player');
+const sword = document.querySelector('img.sword');
 const button = document.querySelector('button');
 
 
@@ -12,7 +13,9 @@ const position = {
     // 壁
     wall : [{x : -10, y : 0, width : 20, height : 830}, {x : 1000, y : 0, width : 20, height : 830}],
     // プレイヤー
-    player : {x : 270, y : 530, width : 60, height : 80, image : 'image/キャラクター2右向き.png'},
+    player : {x : 270, y : 530, width : 35, height : 80, image : 'image/プレイヤー_右向き.png', right : true},
+    // 剣
+    sword : {x : 305, y : 530, width : 35, height : 80, image : 'image/剣_右向き.png', cut : false},
     // 敵
     enemy : {x : 0, y : 0, width : 0, height : 0},
     // 攻撃判定
@@ -175,25 +178,71 @@ const moveLeft = () => {
 };
 
 
+const connectPlayerSword = () => {
+    if (position.player.right) {
+        switch (position.sword.cut) {
+            case false:
+                position.sword.image = 'image/剣_右向き.png';
+                break;
+            case true:
+                position.sword.image = 'image/剣_右向き_切る.png';
+                break;
+        }
+        position.sword.x = position.player.x + position.player.width;
+        // sword.style.left = position.sword.x + 'px';
+        // position.sword.y = position.player.y;
+        // sword.style.top = position.sword.y + 'px';
+        // sword.src = position.sword.image;
+    }
+    else if (! position.player.right) {
+        switch (position.sword.cut) {
+            case false:
+                position.sword.image = 'image/剣_左向き.png';
+                break;
+            case true:
+                position.sword.image = 'image/剣_左向き_切る.png';
+                break;
+        }
+        position.sword.x = position.player.x - position.sword.width;
+        // sword.style.left = position.sword.x + 'px';
+        // position.sword.y = position.player.y;
+        // sword.style.top = position.sword.y + 'px';
+        // sword.src = position.sword.image;
+    }
+    sword.style.left = position.sword.x + 'px';
+    position.sword.y = position.player.y;
+    sword.style.top = position.sword.y + 'px';
+    sword.src = position.sword.image;
+}
+
+
 let intervalID;
+let intervalID_CPS;
 
 intervalID = setInterval(gravity, 40);
+intervalID_CPS = setInterval(connectPlayerSword, 10);
 
-let cut = false;
+
 
 document.body.addEventListener('keydown', (event) => {
     if (event.code === 'KeyA') {
         moveLeft();
-        if (! cut || position.player.image === 'image/キャラクター2右向き_切る.png') {
-            position.player.image = 'image/キャラクター2左向き.png';
+        if (! position.sword.cut || position.player.right) {//position.player.image === 'image/キャラクター2右向き_切る.png') {
+            // position.player.image = 'image/キャラクター2左向き.png';
+            position.player.image = 'image/プレイヤー_左向き.png';
             player.src = position.player.image;
+            position.player.right = false;
+            position.sword.cut = false;
         }
     }
     if (event.code === 'KeyD') {
         moveRight();
-        if (! cut || position.player.image === 'image/キャラクター2左向き_切る.png') {
-            position.player.image = 'image/キャラクター2右向き.png';
+        if (! position.sword.cut || ! position.player.right) {//position.player.image === 'image/キャラクター2左向き_切る.png') {
+            // position.player.image = 'image/キャラクター2右向き.png';
+            position.player.image = 'image/プレイヤー_右向き.png';
             player.src = position.player.image;
+            position.player.right = true;
+            position.sword.cut = false;
         }
     }
     if (event.code === 'Space') {
@@ -206,37 +255,54 @@ document.body.addEventListener('keydown', (event) => {
         }
     }
     if (event.code === 'KeyM') {
-        if(!cut){
-            console.log('M');
-            console.log(position.player.image);
-        if(position.player.image === 'image/キャラクター2右向き.png') {
-            position.player.image = 'image/キャラクター2右向き_切る.png';
+        if(!position.sword.cut){
+        if(position.player.right) {//position.player.image === 'image/キャラクター2右向き.png') {
+            // position.player.image = 'image/キャラクター2右向き_切る.png';
+            position.player.image = 'image/プレイヤー_右向き.png';
             player.src = position.player.image;
-            cut = true;
+            position.player.right = true;
+            position.sword.cut = true;
         }
-        else if(position.player.image === 'image/キャラクター2左向き.png') {
-            position.player.image = 'image/キャラクター2左向き_切る.png';
+        else if(! position.player.right) {//position.player.image === 'image/キャラクター2左向き.png') {
+            // position.player.image = 'image/キャラクター2左向き_切る.png';
+            position.player.image = 'image/プレイヤー_左向き.png';
             player.src = position.player.image;
-            cut = true;
+            position.player.right = false;
+            position.sword.cut = true;
         }
 
        
             setTimeout(() => {
-                // if (cut) {
-                    switch (position.player.image) {
-                        case 'image/キャラクター2右向き_切る.png':
-                            position.player.image = 'image/キャラクター2右向き.png';
-                            break;
-                        case 'image/キャラクター2左向き_切る.png':
-                            position.player.image = 'image/キャラクター2左向き.png';
-                            break;
+                // if (position.sword.cut) {
+                    if (position.sword.cut) {
+                        position.sword.cut = false;
+                        // switch (position.player.right) {
+                        //     case true
+                        //         position.player.image = 'image/キャラクター2右向き.png';
+                        //         position.sword.cut = false;
+                        //         break;
+                        //     case false:
+                        //         position.player.image = 'image/キャラクター2左向き.png';
+                        //         position.player.right = false;
+                        //         break;
+                        // }
                     }
+                    // switch (position.player.image) {
+                    //     case 'image/キャラクター2右向き_切る.png':
+                    //         position.player.image = 'image/キャラクター2右向き.png';
+                    //         position.player.right = true;
+                    //         break;
+                    //     case 'image/キャラクター2左向き_切る.png':
+                    //         position.player.image = 'image/キャラクター2左向き.png';
+                    //         position.player.right = false;
+                    //         break;
+                    // }
                 // }
                 // else {
                 //     player.src = position.player.image;
-                // }
-                player.src = position.player.image;
-                cut = false;
+                // // }
+                // player.src = position.player.image;
+                // position.sword.cut = false;
             }, 500);
         }
     }

@@ -18,7 +18,16 @@ img.player {
     position: absolute;
     top: 530px;
     left: 270px;
-    width: 70px; 
+    width: 35px; 
+    height: 80px;
+    z-index: 3;
+}
+
+img.sword {
+    position: absolute;
+    top: 530px;
+    left: 305px;
+    width: 35px; 
     height: 80px;
     z-index: 3;
 }
