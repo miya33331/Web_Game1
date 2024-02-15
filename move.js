@@ -16,7 +16,7 @@ const position = {
     // 壁
     wall : [{x : -10, y : 0, width : 20, height : 830}, {x : 1000, y : 0, width : 20, height : 830}],
     // プレイヤー
-    player : {x : 270, y : 530, width : 35, height : 80, image : 'image/プレイヤー_右向き.png', right : true},
+    player : {x : 270, y : 530, width : 35, height : 80, image : 'image/プレイヤー_右向き.png', right : true, damage : false},
     // 剣
     sword : {x : 305, y : 530, width : 35, height : 80, image : 'image/剣_右向き.png', cut : false},
     // 敵
@@ -373,16 +373,56 @@ const hit = () => {
         enemy.src = 'image/敵.png';
         capableHit = true;
     }
+
+    let cnt = 0;
+    for (fb of position.fireball) {
+        if(position.overlapEqual(position.player, fb)) {
+            if (position.player.right) {
+                position.player.image = 'image/プレイヤー_右向き_ダメージ.png';
+            }
+            else {
+                position.player.image = 'image/プレイヤー_左向き_ダメージ.png';
+            }
+            player.src = position.player.image;
+
+            fb.x = position.firstFireball.x;
+            fb.y = position.firstFireball.y;
+            fireball[cnt].style.left = fb.x + 'px';
+            fireball[cnt].style.top = fb.y + 'px';
+            fb.exist = false;
+            position.player.damage = true;
+
+            setTimeout(() => {
+                if (position.player.right) {
+                    position.player.image = 'image/プレイヤー_右向き.png';
+                }
+                else {
+                    position.player.image = 'image/プレイヤー_左向き.png';
+                }
+                player.src = position.player.image;
+                position.player.damage = false;
+            }, 500);
+        }
+        cnt++;
+    }
 };
+
+let rangeEnemyMove = 0.5;
 
 const enemyAction = () => {
     let random = Math.random();
+    if (position.enemy.x < position.screen.x + position.screen.width * 0.1) {
+        rangeEnemyMove = 0.5;
+    }
+    else if (position.enemy.x > position.screen.x + position.screen.width * 0.9 - position.enemy.width) {
+        rangeEnemyMove = 0.2;
+    }
     // 右移動
-    if (0 <= random && random < 0.35) {
+    if (0 <= random && random < rangeEnemyMove) {
         moveRightEnemy();
     }
     // 左移動
-    else if (0.35 <= random && random < 0.7) {
+    else if (rangeEnemyMove <= random && random < 0.7) {
         moveLeftEnemy();
     }
     // ジャンプ
@@ -475,7 +515,12 @@ document.body.addEventListener('keydown', (event) => {
         moveLeft();
         if (! position.sword.cut || position.player.right) {//position.player.image === 'image/キャラクター2右向き_切る.png') {
             // position.player.image = 'image/キャラクター2左向き.png';
-            position.player.image = 'image/プレイヤー_左向き.png';
+            if(! position.player.damage){
+                position.player.image = 'image/プレイヤー_左向き.png';
+            }
+            else {
+                position.player.image = 'image/プレイヤー_左向き_ダメージ.png';
+            }
             player.src = position.player.image;
             position.player.right = false;
             position.sword.cut = false;
@@ -485,7 +530,12 @@ document.body.addEventListener('keydown', (event) => {
         moveRight();
         if (! position.sword.cut || ! position.player.right) {//position.player.image === 'image/キャラクター2左向き_切る.png') {
             // position.player.image = 'image/キャラクター2右向き.png';
-            position.player.image = 'image/プレイヤー_右向き.png';
+            if(! position.player.damage){
+                position.player.image = 'image/プレイヤー_右向き.png';
+            }
+            else {
+                position.player.image = 'image/プレイヤー_右向き_ダメージ.png';
+            }
             player.src = position.player.image;
             position.player.right = true;
             position.sword.cut = false;
