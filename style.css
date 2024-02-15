@@ -103,3 +103,48 @@ img.wall1 {
     height: 830px;
     z-index: 2;
 }
+
+img.fireball0 {
+    position: absolute;
+    top: 0;
+    left: 1030px;
+    width: 40px; 
+    height: 40px;
+    z-index: 4;
+}
+
+img.fireball1 {
+    position: absolute;
+    top: 0;
+    left: 1030px;
+    width: 40px; 
+    height: 40px;
+    z-index: 4;
+}
+
+img.fireball2 {
+    position: absolute;
+    top: 0;
+    left: 1030px;
+    width: 40px; 
+    height: 40px;
+    z-index: 4;
+}
+
+img.fireball3 {
+    position: absolute;
+    top: 0;
+    left: 1030px;
+    width: 40px; 
+    height: 40px;
+    z-index: 4;
+}
+
+img.fireball4 {
+    position: absolute;
+    top: 0;
+    left: 1030px;
+    width: 40px; 
+    height: 40px;
+    z-index: 4;
+}

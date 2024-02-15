@@ -1,8 +1,10 @@
+const screen = document.querySelector('#screen');
 const background = document.querySelector('img.background');
 const player = document.querySelector('img.player');
 const sword = document.querySelector('img.sword');
 const enemy = document.querySelector('img.enemy');
 const button = document.querySelector('button');
+const fireball = [document.querySelector('img.fireball0'), document.querySelector('img.fireball1'), document.querySelector('img.fireball2'), document.querySelector('img.fireball3'), document.querySelector('img.fireball4')];
 
 
 // !!cssの値の取得が上手くいかなかったため、cssに対応する値を手入力!!
@@ -19,8 +21,10 @@ const position = {
     sword : {x : 305, y : 530, width : 35, height : 80, image : 'image/剣_右向き.png', cut : false},
     // 敵
     enemy : {x : 670, y : 530, width : 70, height : 80},
-    // 攻撃判定
-    attack : {x : -9999, y : -9999, width : -9999, height : -9999},
+    // ファイヤーボール初期位置
+    firstFireball : {x : 1030, y : 0},
+    // ファイヤーボール
+    fireball : [{x : 1030, y : 0, width : 40, height : 40, exist : false}, {x : 1030, y : 0, width : 40, height : 40, exist : false}, {x : 1030, y : 0, width : 40, height : 40, exist : false}, {x : 1030, y : 0, width : 40, height : 40, exist : false}, {x : 1030, y : 0, width : 40, height : 40, exist : false}],
     // 重なり判定
     overlap : (obj1, obj2) => {
         for (let i = 0; i < 2; i++) {
@@ -301,6 +305,22 @@ const moveLeftEnemy = () => {
 };
 
 
+const attack = () => {
+    let cnt = 0;
+    for (let fb of position.fireball) {
+        if (! fb.exist) {
+            fb.x = position.enemy.x;
+            fb.y = position.enemy.y;
+            fireball[cnt].style.left = fb.x + 'px';
+            fireball[cnt].style.top = fb.y + 'px';
+            fb.exist = true;
+            return;
+        }
+        cnt++;
+    }
+}
+
+
 const connectPlayerSword = () => {
     if (position.player.right) {
         switch (position.sword.cut) {
@@ -358,15 +378,15 @@ const hit = () => {
 const enemyAction = () => {
     let random = Math.random();
     // 右移動
-    if (0 <= random && random < 0.25) {
+    if (0 <= random && random < 0.35) {
         moveRightEnemy();
     }
     // 左移動
-    else if (0.25 <= random && random < 0.5) {
+    else if (0.35 <= random && random < 0.7) {
         moveLeftEnemy();
     }
     // ジャンプ
-    else if (0.5 <= random && random < 0.75) {
+    else if (0.7 <= random && random < 0.9) {
         if (e_doublejump2) {
             e_v = 20;
         }
@@ -378,10 +398,59 @@ const enemyAction = () => {
         }
     }
     // 攻撃
-    // else if (0.75 <= random && random < 1) {
-        
-    // }
+    else if (0.9 <= random && random < 1) {
+        attack();
+    }
 }
+
+const fireballAction = () => {
+    let cnt = 0;
+    for (let fb of position.fireball) {
+        if (fb.exist) {
+            if (fb.x > position.player.x) {
+                fb.x -= 3;
+            }
+            else if (fb.x < position.player.x) {
+                fb.x += 3;
+            }
+            if (fb.y > position.player.y) {
+                fb.y -= 3;
+            }
+            else if (fb.y < position.player.y) {
+                fb.y += 3;
+            }
+
+            fireball[cnt].style.left = fb.x + 'px';
+            fireball[cnt].style.top = fb.y + 'px';
+
+            if (position.overlap(fb, position.block[0]) || position.overlap(fb, position.block[1]) || position.overlap(fb, position.block[2]) || position.overlap(fb, position.block[3]) || position.overlap(fb, position.block[4]) || position.overlap(fb, position.wall[0]) || position.overlap(fb, position.wall[1])){
+                fb.x = position.firstFireball.x;
+                fb.y = position.firstFireball.y;
+                fireball[cnt].style.left = fb.x + 'px';
+                fireball[cnt].style.top = fb.y + 'px';
+                fb.exist = false;
+            }
+        }
+        cnt++;
+    }
+}
+
+// const finishInterval = () => {
+//     let cnt = 0;
+//     for (let fb of position.fireball) {
+//         if (fb.exist) {
+//             if (position.overlap(fb, position.block[0]) || position.overlap(fb, position.block[1]) || position.overlap(fb, position.block[2]) || position.overlap(fb, position.block[3]) || position.overlap(fb, position.block[4]) || position.overlap(fb, position.wall[0]) || position.overlap(fb, position.wall[1])){
+//                 fb.x = position.firstFireball.x;
+//                 fb.y = position.firstFireball.y;
+//                 fireball[cnt].style.left = fb.x + 'px';
+//                 fireball[cnt].style.top = fb.y + 'px';
+//                 fb.exist = false;
+//                 clearInterval(intervalID_fireball[cnt]);
+//             }
+//         }
+//     }
+//     cnt++;
+// }
 
 
 let intervalID;
@@ -389,12 +458,16 @@ let intervalID_CPS;
 let intervalID_hit;
 let intervalID_gravityEnemy;
 let intervalID_enemyAction;
+let intervalID_fireball;
+// let intervalID_clearInterval;
 
 intervalID = setInterval(gravity, 40);
 intervalID_gravityEnemy = setInterval(gravityEnemy, 40);
 intervalID_CPS = setInterval(connectPlayerSword, 10);
 intervalID_hit = setInterval(hit, 10);
 intervalID_enemyAction = setInterval(enemyAction, 100);
+intervalID_fireball = setInterval(fireballAction, 40);
+// intervalID_clearInterval = setInterval(finishInterval, 10);
 
 
 document.body.addEventListener('keydown', (event) => {
@@ -485,4 +558,4 @@ document.body.addEventListener('keydown', (event) => {
 
 // clearInterval(intervalID);
 
-setInterval(() => {console.log(v, d_t);}, 1000);
+// setInterval(() => {console.log(v, d_t);}, 1000);
