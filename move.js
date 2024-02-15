@@ -1,6 +1,7 @@
 const background = document.querySelector('img.background');
 const player = document.querySelector('img.player');
 const sword = document.querySelector('img.sword');
+const enemy = document.querySelector('img.enemy');
 const button = document.querySelector('button');
 
 
@@ -17,7 +18,7 @@ const position = {
     // 剣
     sword : {x : 305, y : 530, width : 35, height : 80, image : 'image/剣_右向き.png', cut : false},
     // 敵
-    enemy : {x : 0, y : 0, width : 0, height : 0},
+    enemy : {x : 670, y : 530, width : 70, height : 80},
     // 攻撃判定
     attack : {x : -9999, y : -9999, width : -9999, height : -9999},
     // 重なり判定
@@ -112,7 +113,6 @@ const gravity = () => {
         }
     }
 
-    console.log(position.player.y)
     position.player.y -= v - g * d_t;
     player.style.top = position.player.y + 'px';
     d_t += 0.04;
@@ -213,15 +213,33 @@ const connectPlayerSword = () => {
     position.sword.y = position.player.y;
     sword.style.top = position.sword.y + 'px';
     sword.src = position.sword.image;
-}
+};
+
+let capableHit = true;
+
+const hit = () => {
+    if (position.sword.cut) {
+        if (capableHit) {
+            if (position.overlapEqual(position.sword, position.enemy)) {
+                enemy.src = 'image/敵_ダメージ.png';
+                capableHit = false;
+            }
+        }
+    }
+    else {
+        enemy.src = 'image/敵.png';
+        capableHit = true;
+    }
+};
 
 
 let intervalID;
 let intervalID_CPS;
+let intervalID_hit;
 
 intervalID = setInterval(gravity, 40);
 intervalID_CPS = setInterval(connectPlayerSword, 10);
-
+intervalID_hit = setInterval(hit, 10);
 
 
 document.body.addEventListener('keydown', (event) => {

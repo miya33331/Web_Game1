@@ -32,6 +32,15 @@ img.sword {
     z-index: 3;
 }
 
+img.enemy {
+    position: absolute;
+    top: 530px;
+    left: 670px;
+    width: 70px; 
+    height: 80px;
+    z-index: 3;
+}
+
 img.block0 {
     position: absolute;
     top: 790px;
