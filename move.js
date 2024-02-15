@@ -12,7 +12,7 @@ const position = {
     // 壁
     wall : [{x : -10, y : 0, width : 20, height : 830}, {x : 1000, y : 0, width : 20, height : 830}],
     // プレイヤー
-    player : {x : 270, y : 530, width : 60, height : 80},
+    player : {x : 270, y : 530, width : 60, height : 80, image : 'image/キャラクター2右向き.png'},
     // 敵
     enemy : {x : 0, y : 0, width : 0, height : 0},
     // 攻撃判定
@@ -174,16 +174,27 @@ const moveLeft = () => {
     player.style.left = position.player.x + 'px';
 };
 
+
 let intervalID;
 
 intervalID = setInterval(gravity, 40);
 
+let cut = false;
+
 document.body.addEventListener('keydown', (event) => {
     if (event.code === 'KeyA') {
         moveLeft();
+        if (! cut || position.player.image === 'image/キャラクター2右向き_切る.png') {
+            position.player.image = 'image/キャラクター2左向き.png';
+            player.src = position.player.image;
+        }
     }
     if (event.code === 'KeyD') {
         moveRight();
+        if (! cut || position.player.image === 'image/キャラクター2左向き_切る.png') {
+            position.player.image = 'image/キャラクター2右向き.png';
+            player.src = position.player.image;
+        }
     }
     if (event.code === 'Space') {
         v = 20;
@@ -192,6 +203,41 @@ document.body.addEventListener('keydown', (event) => {
             v = 15;
             d_t = 0;
             doublejump2 = false;
+        }
+    }
+    if (event.code === 'KeyM') {
+        if(!cut){
+            console.log('M');
+            console.log(position.player.image);
+        if(position.player.image === 'image/キャラクター2右向き.png') {
+            position.player.image = 'image/キャラクター2右向き_切る.png';
+            player.src = position.player.image;
+            cut = true;
+        }
+        else if(position.player.image === 'image/キャラクター2左向き.png') {
+            position.player.image = 'image/キャラクター2左向き_切る.png';
+            player.src = position.player.image;
+            cut = true;
+        }
+
+       
+            setTimeout(() => {
+                // if (cut) {
+                    switch (position.player.image) {
+                        case 'image/キャラクター2右向き_切る.png':
+                            position.player.image = 'image/キャラクター2右向き.png';
+                            break;
+                        case 'image/キャラクター2左向き_切る.png':
+                            position.player.image = 'image/キャラクター2左向き.png';
+                            break;
+                    }
+                // }
+                // else {
+                //     player.src = position.player.image;
+                // }
+                player.src = position.player.image;
+                cut = false;
+            }, 500);
         }
     }
 });
