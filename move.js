@@ -122,12 +122,13 @@ const moveRight = () => {
     if (position.overlap(position.player, position.block[0]) || position.overlap(position.player, position.block[1]) || position.overlap(position.player, position.block[2]) || position.overlap(position.player, position.block[3]) || position.overlap(position.player, position.wall[0]) || position.overlap(position.player, position.wall[1])){
         for (let posblock of position.block) {
             if (position.overlap(position.player, posblock)) {
-                position.player.x = posblock.x - posblock.width - 1;
+                // position.player.x = posblock.x - posblock.width - 1;
+                position.player.x -= 1;
             }
         }
         for (let poswall of position.wall) {
             if (position.overlap(position.player, poswall)) {
-                position.player.x = poswall.x - poswall.width;
+                position.player.x = poswall.x - position.player.width;
             }
         }
 
@@ -149,7 +150,8 @@ const moveLeft = () => {
     if (position.overlap(position.player, position.block[0]) || position.overlap(position.player, position.block[1]) || position.overlap(position.player, position.block[2]) || position.overlap(position.player, position.block[3]) || position.overlap(position.player, position.wall[0]) || position.overlap(position.player, position.wall[1])){
         for (let posblock of position.block) {
             if (position.overlap(position.player, posblock)) {
-                position.player.x = posblock.x + posblock.width + 1;
+                // position.player.x = posblock.x + posblock.width + 1;
+                position.player.x += 1;
             }
         }
         for (let poswall of position.wall) {
@@ -171,7 +173,6 @@ const moveLeft = () => {
     position.player.x -= 6;
     player.style.left = position.player.x + 'px';
 };
-
 
 let intervalID;
 
