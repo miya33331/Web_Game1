@@ -120,6 +120,53 @@ const gravity = () => {
     doublejump1 = true;
 };
 
+let e_v = 0;
+let e_d_t = 0;
+let e_jump = false;
+let e_doublejump1 = false;
+let e_doublejump2 = true;
+
+const gravityEnemy = () => {
+    if (!e_jump) {
+        if (position.overlapEqual(position.enemy, position.block[0]) || position.overlapEqual(position.enemy, position.block[1]) || position.overlapEqual(position.enemy, position.block[2]) || position.overlapEqual(position.enemy, position.block[3])){
+            if (e_v - g * e_d_t > 0) {
+                e_v = -((e_v - g * e_d_t) * 0.5);
+                e_d_t = 0;
+
+                for (let posblock of position.block) {
+                    if (position.overlap(position.enemy, posblock)) {
+                        position.enemy.y = posblock.y + posblock.height;
+                    }
+                }
+
+                enemy.style.top = position.enemy.y + 'px';
+            }
+            else {
+                e_v = 0;
+                e_d_t = 0;
+
+                for (let posblock of position.block) {
+                    if (position.overlap(position.enemy, posblock)) {
+                        position.enemy.y = posblock.y - position.enemy.height;
+                    }
+                }
+
+                enemy.style.top = position.enemy.y + 'px';
+                e_doublejump1 = false;
+                e_doublejump2 = true;
+                return;
+            }
+        }
+    }
+
+    position.enemy.y -= e_v - g * e_d_t;
+    enemy.style.top = position.enemy.y + 'px';
+    e_d_t += 0.04;
+    e_jump = false;
+    e_doublejump1 = true;
+};
+
+
 
 const moveRight = () => {
     if (position.overlap(position.player, position.block[0]) || position.overlap(position.player, position.block[1]) || position.overlap(position.player, position.block[2]) || position.overlap(position.player, position.block[3]) || position.overlap(position.player, position.wall[0]) || position.overlap(position.player, position.wall[1])){
@@ -178,6 +225,63 @@ const moveLeft = () => {
 };
 
 
+const moveRightEnemy = () => {
+    if (position.overlap(position.enemy, position.block[0]) || position.overlap(position.enemy, position.block[1]) || position.overlap(position.enemy, position.block[2]) || position.overlap(position.enemy, position.block[3]) || position.overlap(position.enemy, position.wall[0]) || position.overlap(position.enemy, position.wall[1])){
+        for (let posblock of position.block) {
+            if (position.overlap(position.enemy, posblock)) {
+                // position.enemy.x = posblock.x - posblock.width - 1;
+                position.enemy.x -= 1;
+            }
+        }
+        for (let poswall of position.wall) {
+            if (position.overlap(position.enemy, poswall)) {
+                position.enemy.x = poswall.x - position.enemy.width;
+            }
+        }
+
+        enemy.style.left = position.enemy.x + 'px';
+        return;
+    }
+    else{
+        for (let poswall of position.wall) {
+            if (position.overlapEqual(position.enemy, poswall) && position.enemy.x + position.enemy.width === poswall.x) {
+                return;
+            }
+        }
+    }
+    position.enemy.x += 6;
+    enemy.style.left = position.enemy.x + 'px';
+}; 
+
+const moveLeftEnemy = () => {
+    if (position.overlap(position.enemy, position.block[0]) || position.overlap(position.enemy, position.block[1]) || position.overlap(position.enemy, position.block[2]) || position.overlap(position.enemy, position.block[3]) || position.overlap(position.enemy, position.wall[0]) || position.overlap(position.enemy, position.wall[1])){
+        for (let posblock of position.block) {
+            if (position.overlap(position.enemy, posblock)) {
+                // position.enemy.x = posblock.x + posblock.width + 1;
+                position.enemy.x += 1;
+            }
+        }
+        for (let poswall of position.wall) {
+            if (position.overlap(position.enemy, poswall)) {
+                position.enemy.x = poswall.x + poswall.width;
+            }
+        }
+
+        enemy.style.left = position.enemy.x + 'px';
+        return;
+    }
+    else{
+        for (let poswall of position.wall) {
+            if (position.overlapEqual(position.enemy, poswall) && position.enemy.x === poswall.x + poswall.width ) {
+                return;
+            }
+        }
+    }
+    position.enemy.x -= 6;
+    enemy.style.left = position.enemy.x + 'px';
+};
+
+
 const connectPlayerSword = () => {
     if (position.player.right) {
         switch (position.sword.cut) {
@@ -232,14 +336,45 @@ const hit = () => {
     }
 };
 
+const enemyAction = () => {
+    let random = Math.random();
+    // 右移動
+    if (0 <= random && random < 0.25) {
+        moveRightEnemy();
+        console.log('右');
+    }
+    // 左移動
+    else if (0.25 <= random && random < 0.5) {
+        moveLeftEnemy();
+    }
+    // ジャンプ
+    else if (0.5 <= random && random < 0.75) {
+        e_v = 20;
+        e_jump = true;
+        if (e_doublejump1 && e_doublejump2) {
+            e_v = 15;
+            e_d_t = 0;
+            e_doublejump2 = false;
+        }
+    }
+    // 攻撃
+    // else if (0.75 <= random && random < 1) {
+        
+    // }
+}
+
 
 let intervalID;
 let intervalID_CPS;
 let intervalID_hit;
+let intervalID_gravityEnemy;
+let intervalID_enemyAction;
 
 intervalID = setInterval(gravity, 40);
+intervalID_gravityEnemy = setInterval(gravityEnemy, 40);
 intervalID_CPS = setInterval(connectPlayerSword, 10);
 intervalID_hit = setInterval(hit, 10);
+intervalID_enemyAction = setInterval(enemyAction, 40);
 
 
 document.body.addEventListener('keydown', (event) => {
