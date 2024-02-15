@@ -556,14 +556,24 @@ document.body.addEventListener('keydown', (event) => {
         if(!position.sword.cut){
         if(position.player.right) {//position.player.image === 'image/キャラクター2右向き.png') {
             // position.player.image = 'image/キャラクター2右向き_切る.png';
-            position.player.image = 'image/プレイヤー_右向き.png';
+            if(! position.player.damage){
+                position.player.image = 'image/プレイヤー_右向き.png';
+            }
+            else {
+                position.player.image = 'image/プレイヤー_右向き_ダメージ.png';
+            }
             player.src = position.player.image;
             position.player.right = true;
             position.sword.cut = true;
         }
         else if(! position.player.right) {//position.player.image === 'image/キャラクター2左向き.png') {
             // position.player.image = 'image/キャラクター2左向き_切る.png';
-            position.player.image = 'image/プレイヤー_左向き.png';
+            if(! position.player.damage){
+                position.player.image = 'image/プレイヤー_左向き.png';
+            }
+            else {
+                position.player.image = 'image/プレイヤー_左向き_ダメージ.png';
+            }
             player.src = position.player.image;
             position.player.right = false;
             position.sword.cut = true;
