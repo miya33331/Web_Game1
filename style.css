@@ -77,6 +77,15 @@ img.block3 {
     z-index: 2;
 }
 
+img.block4 {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 1000px; 
+    height: 20px;
+    z-index: 2;
+}
+
 img.wall0 {
     position: absolute;
     top: 0;

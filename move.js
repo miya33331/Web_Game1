@@ -10,7 +10,7 @@ const position = {
     // スクリーン
     screen : {x : 0, y : 0, width : 1000, height : 830},
     // ブロック
-    block : [{x : 0, y : 790, width : 1000, height : 40}, {x : 200, y : 610, width : 200, height : 40}, {x : 600, y : 610, width : 200, height : 40}, {x : 400, y : 430, width : 200, height : 40}],
+    block : [{x : 0, y : 790, width : 1000, height : 40}, {x : 200, y : 610, width : 200, height : 40}, {x : 600, y : 610, width : 200, height : 40}, {x : 400, y : 430, width : 200, height : 40}, {x : 0, y : 0, width : 1000, height : 20}],
     // 壁
     wall : [{x : -10, y : 0, width : 20, height : 830}, {x : 1000, y : 0, width : 20, height : 830}],
     // プレイヤー
@@ -82,6 +82,16 @@ const g = 25;
 
 const gravity = () => {
     if (!jump) {
+        if(position.overlap(position.player, position.block[4])) {
+            if (v - g * d_t > 0) {
+                v = -((v - g * d_t) * 0.5);
+                d_t = 0;
+                position.player.y = position.block[4].y + position.block[4].height;
+                player.style.top = position.player.y + 'px';
+            }
+            return;
+        }
+
         if (position.overlapEqual(position.player, position.block[0]) || position.overlapEqual(position.player, position.block[1]) || position.overlapEqual(position.player, position.block[2]) || position.overlapEqual(position.player, position.block[3])){
             if (v - g * d_t > 0) {
                 v = -((v - g * d_t) * 0.5);
@@ -92,7 +102,6 @@ const gravity = () => {
                         position.player.y = posblock.y + posblock.height;
                     }
                 }
-
                 player.style.top = position.player.y + 'px';
             }
             else {
@@ -128,6 +137,16 @@ let e_doublejump2 = true;
 
 const gravityEnemy = () => {
     if (!e_jump) {
+        if(position.overlap(position.enemy, position.block[4])) {
+            if (e_v - g * e_d_t > 0) {
+                e_v = -((e_v - g * e_d_t) * 0.5);
+                e_d_t = 0;
+                position.enemy.y = position.block[4].y + position.block[4].height;
+                enemy.style.top = position.enemy.y + 'px';
+            }
+            return;
+        }
+
         if (position.overlapEqual(position.enemy, position.block[0]) || position.overlapEqual(position.enemy, position.block[1]) || position.overlapEqual(position.enemy, position.block[2]) || position.overlapEqual(position.enemy, position.block[3])){
             if (e_v - g * e_d_t > 0) {
                 e_v = -((e_v - g * e_d_t) * 0.5);
@@ -341,7 +360,6 @@ const enemyAction = () => {
     // 右移動
     if (0 <= random && random < 0.25) {
         moveRightEnemy();
-        console.log('右');
     }
     // 左移動
     else if (0.25 <= random && random < 0.5) {
@@ -349,7 +367,9 @@ const enemyAction = () => {
     }
     // ジャンプ
     else if (0.5 <= random && random < 0.75) {
-        e_v = 20;
+        if (e_doublejump2) {
+            e_v = 20;
+        }
         e_jump = true;
         if (e_doublejump1 && e_doublejump2) {
             e_v = 15;
@@ -374,7 +394,7 @@ intervalID = setInterval(gravity, 40);
 intervalID_gravityEnemy = setInterval(gravityEnemy, 40);
 intervalID_CPS = setInterval(connectPlayerSword, 10);
 intervalID_hit = setInterval(hit, 10);
-intervalID_enemyAction = setInterval(enemyAction, 40);
+intervalID_enemyAction = setInterval(enemyAction, 100);
 
 
 document.body.addEventListener('keydown', (event) => {
@@ -399,7 +419,9 @@ document.body.addEventListener('keydown', (event) => {
         }
     }
     if (event.code === 'Space') {
-        v = 20;
+        if (doublejump2) {
+            v = 20;
+        }
         jump = true;
         if (doublejump1 && doublejump2) {
             v = 15;
@@ -463,4 +485,4 @@ document.body.addEventListener('keydown', (event) => {
 
 // clearInterval(intervalID);
 
-setInterval(() => {console.log('1');}, 1000);
+setInterval(() => {console.log(v, d_t);}, 1000);
