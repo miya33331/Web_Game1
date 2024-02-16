@@ -1,18 +1,101 @@
 const screen = document.querySelector('#screen');
 const background = document.querySelector('img.background');
-const h1 = document.querySelector('h1'); 
+const intro = document.querySelector('#intro');
+const btn = document.querySelector('button');
+const h1 = document.querySelector('h1.winLose'); 
 const player = document.querySelector('img.player');
 const sword = document.querySelector('img.sword');
 const enemy = document.querySelector('img.enemy');
-const button = document.querySelector('button');
 const fireball = [document.querySelector('img.fireball0'), document.querySelector('img.fireball1'), document.querySelector('img.fireball2'), document.querySelector('img.fireball3'), document.querySelector('img.fireball4')];
 const iceball = [document.querySelector('img.iceball0'), document.querySelector('img.iceball1'), document.querySelector('img.iceball2'), document.querySelector('img.iceball3'), document.querySelector('img.iceball4')];
 const playerHPBar = document.querySelector('img.player_HP_green');
 const enemyHPBar = document.querySelector('img.enemy_HP_green');
+const reset = document.querySelector('#reset');
+const buttonStop = document.querySelector('p.buttonStop');
 
+let clearIntervalNecessary = false;
+
+const initialization = () => {
+    // position = JSON.parse(JSON.stringify(firstPosition));
+    // position = firstPosition;
+
+    position = firstPosition;
+
+    player.style.left = position.player.x + 'px';
+    player.style.top = position.player.y + 'px';
+    player.style.width = position.player.width + 'px';
+    player.style.height = position.player.height + 'px';
+    player.src = position.player.image;
+
+    sword.style.left = position.sword.x + 'px';
+    sword.style.top = position.sword.y + 'px';
+    sword.style.width = position.sword.width + 'px';
+    sword.style.height = position.sword.height + 'px';
+    sword.src = position.sword.image;
+
+    enemy.style.left = position.enemy.x + 'px';
+    enemy.style.top = position.enemy.y + 'px';
+    enemy.style.width = position.enemy.width + 'px';
+    enemy.style.height = position.enemy.height + 'px';
+    enemy.src = 'image/敵.png';
+
+    for(let i = 0; i < position.fireball.length; i++) {
+        fireball[i].style.left = position.fireball[i].x + 'px';
+        fireball[i].style.top = position.fireball[i].y + 'px';
+        fireball[i].style.width = position.fireball[i].width + 'px';
+        fireball[i].style.height = position.fireball[i].height + 'px';
+    }
+
+    for(let i = 0; i < position.iceball.length; i++) {
+        iceball[i].style.left = position.iceball[i].x + 'px';
+        iceball[i].style.top = position.iceball[i].y + 'px';
+        iceball[i].style.width = position.iceball[i].width + 'px';
+        iceball[i].style.height = position.iceball[i].height + 'px';
+    }
+
+    playerHPBar.style.width = 200 + 'px';
+    enemyHPBar.style.width = 200 + 'px';
+
+    h1.innerText = '';
+
+    if (clearIntervalNecessary) {
+        clearInterval(intervalID_gravityPlayer);
+        clearInterval(intervalID_CPS);
+        clearInterval(intervalID_hit);
+        clearInterval(intervalID_iceHit);
+        clearInterval(intervalID_gravityEnemy);
+        clearInterval(intervalID_enemyAction);
+        clearInterval(intervalID_fireball);
+        clearInterval(intervalID_iceball);
+        clearInterval(intervalID_knockBack);
+
+        clearIntervalNecessary = false;
+    }
+    
+    intervalID_gravityPlayer = setInterval(gravity, 40);
+    intervalID_gravityEnemy = setInterval(gravityEnemy, 40);
+    intervalID_CPS = setInterval(connectPlayerSword, 10);
+    intervalID_hit = setInterval(hit, 10);
+    intervalID_iceHit = setInterval(iceHit, 10);
+    intervalID_enemyAction = setInterval(enemyAction, 100);
+    intervalID_fireball = setInterval(fireballAction, 40);
+    intervalID_iceball = setInterval(iceballAction, 40);
+    intervalID_knockBack = setInterval(knockBack, 40);
+
+    clearIntervalNecessary = true;
+}
+
+btn.addEventListener('click', () => {
+    intro.remove();
+    initialization();
+});
+
+reset.addEventListener('click', () => {
+    location.reload()
+});
 
 // !!cssの値の取得が上手くいかなかったため、cssに対応する値を手入力!!
-const position = {
+let position = {
     // スクリーン
     screen : {x : 0, y : 0, width : 1000, height : 830},
     // ブロック
@@ -84,6 +167,80 @@ const position = {
         return false;
     }
 };
+
+const firstPosition = {
+    // スクリーン
+    screen : {x : 0, y : 0, width : 1000, height : 830},
+    // ブロック
+    block : [{x : 0, y : 790, width : 1000, height : 40}, {x : 200, y : 610, width : 200, height : 40}, {x : 600, y : 610, width : 200, height : 40}, {x : 400, y : 430, width : 200, height : 40}, {x : 0, y : 0, width : 1000, height : 20}],
+    // 壁
+    wall : [{x : -10, y : 0, width : 20, height : 830}, {x : 1000, y : 0, width : 20, height : 830}],
+    // プレイヤー
+    player : {x : 270, y : 530, width : 35, height : 80, image : 'image/プレイヤー_右向き.png', right : true, damage : false, hitpoint : 200},
+    // 剣
+    sword : {x : 305, y : 530, width : 35, height : 80, image : 'image/剣_右向き.png', cut : false},
+    // 敵
+    enemy : {x : 670, y : 530, width : 70, height : 80, damage : false, freeze :  false, hitpoint : 200},
+    // ファイヤーボール初期位置
+    firstFireball : {x : 1030, y : 0},
+    // ファイヤーボール
+    fireball : [{x : 1030, y : 0, width : 40, height : 40, exist : false}, {x : 1030, y : 0, width : 40, height : 40, exist : false}, {x : 1030, y : 0, width : 40, height : 40, exist : false}, {x : 1030, y : 0, width : 40, height : 40, exist : false}, {x : 1030, y : 0, width : 40, height : 40, exist : false}],
+    // アイスボール初期位置
+    firstIceball : {x : -55, y : 0},
+    // アイスボール
+    iceball : [{x : -55, y : 0, width : 45, height : 25, exist : false, right : true}, {x : -55, y : 0, width : 45, height : 25, exist : false, right : true}, {x : -55, y : 0, width : 45, height : 25, exist : false, right : true}, {x : -55, y : 0, width : 45, height : 25, exist : false, right : true}, {x : -55, y : 0, width : 45, height : 25, exist : false, right : true}],
+    // 重なり判定
+    overlap : (obj1, obj2) => {
+        for (let i = 0; i < 2; i++) {
+            if (obj1.x < obj2.x && obj2.x < obj1.x + obj1.width) {
+                if (obj1.y < obj2.y && obj2.y < obj1.y + obj1.height){
+                    return true;
+                }
+                if (obj1.y < obj2.y + obj2.height && obj2.y + obj2.height < obj1.y + obj1.height){
+                    return true;
+                }
+            }
+            if (obj1.x < obj2.x + obj2.width && obj2.x + obj2.width < obj1.x + obj1.width) {
+                if (obj1.y < obj2.y && obj2.y < obj1.y + obj1.height){
+                    return true;
+                }
+                if (obj1.y < obj2.y + obj2.height && obj2.y + obj2.height < obj1.y + obj1.height){
+                    return true;
+                }
+            }
+            const tmp = obj1;
+            obj1 = obj2;
+            obj2 = tmp;
+        }
+        return false;
+    },
+    // 重なり判定(=を含む)
+    overlapEqual : (obj1, obj2) => {
+        for (let i = 0; i < 2; i++) {
+            if (obj1.x <= obj2.x && obj2.x <= obj1.x + obj1.width) {
+                if (obj1.y <= obj2.y && obj2.y <= obj1.y + obj1.height){
+                    return true;
+                }
+                if (obj1.y <= obj2.y + obj2.height && obj2.y + obj2.height <= obj1.y + obj1.height){
+                    return true;
+                }
+            }
+            if (obj1.x <= obj2.x + obj2.width && obj2.x + obj2.width <= obj1.x + obj1.width) {
+                if (obj1.y <= obj2.y && obj2.y <= obj1.y + obj1.height){
+                    return true;
+                }
+                if (obj1.y <= obj2.y + obj2.height && obj2.y + obj2.height <= obj1.y + obj1.height){
+                    return true;
+                }
+            }
+            const tmp = obj1;
+            obj1 = obj2;
+            obj2 = tmp;
+        }
+        return false;
+    }
+};
+
 
 let v = 0;
 let d_t = 0;
@@ -663,15 +820,18 @@ let intervalID_iceball;
 let intervalID_knockBack;
 // let intervalID_clearInterval;
 
-intervalID_gravityPlayer = setInterval(gravity, 40);
-intervalID_gravityEnemy = setInterval(gravityEnemy, 40);
-intervalID_CPS = setInterval(connectPlayerSword, 10);
-intervalID_hit = setInterval(hit, 10);
-intervalID_iceHit = setInterval(iceHit, 10);
-intervalID_enemyAction = setInterval(enemyAction, 100);
-intervalID_fireball = setInterval(fireballAction, 40);
-intervalID_iceball = setInterval(iceballAction, 40);
-intervalID_knockBack = setInterval(knockBack, 40);
+/////////////////////////////////////////////////////////////
+// intervalID_gravityPlayer = setInterval(gravity, 40);
+// intervalID_gravityEnemy = setInterval(gravityEnemy, 40);
+// intervalID_CPS = setInterval(connectPlayerSword, 10);
+// intervalID_hit = setInterval(hit, 10);
+// intervalID_iceHit = setInterval(iceHit, 10);
+// intervalID_enemyAction = setInterval(enemyAction, 100);
+// intervalID_fireball = setInterval(fireballAction, 40);
+// intervalID_iceball = setInterval(iceballAction, 40);
+// intervalID_knockBack = setInterval(knockBack, 40);
+//////////////////////////////////////////////////////////////
+
 // intervalID_clearInterval = setInterval(finishInterval, 10);
 
 iceballCoolTime = true;
@@ -873,3 +1033,4 @@ const finishGame = () => {
 };
 
 let intervalID_finishGame = setInterval(finishGame, 50);
+

@@ -8,7 +8,24 @@
 </head>
 <body>
     <div id="screen">
-        <h1></h1>
+        <div id="intro">
+            <h1>バトルゲーム</h1>
+            <p>敵を倒そう！！</p>
+            <p>敵の攻撃 : 炎攻撃</p>
+            <p>プレイヤー操作</p>
+            <ul>
+                <li>キーボード A : 左に移動</li>
+                <li>キーボード D : 右に移動</li>
+                <li>キーボード Space : ジャンプ</li>
+                <li>キーボード N : 氷攻撃</li>
+                <li>キーボード M : 剣攻撃</li>
+            </ul>
+            <p>氷攻撃の効果 : 敵を凍らす・炎を消す</p>
+            <p>剣攻撃の効果 : ダメージを与える</p>
+            <p>敵を凍らせたときにダメージを与えると大ダメージになる</p>
+            <button>スタート</button>
+        </div>
+        <h1 class="winLose"></h1>
         <img src="image/background.png" alt="背景" class="background">
         <img src="image/プレイヤー_右向き.png" alt="プレイヤー" class="player">
         <img src="image/剣_右向き.png" alt="剣" class="sword">
@@ -36,6 +53,8 @@
         <img src="image/プレイヤーHP_灰色.png" alt="player_HP_gray" class="player_HP_gray">
         <img src="image/プレイヤーHP_緑色.png" alt="enemy_HP_green" class="enemy_HP_green">
         <img src="image/プレイヤーHP_灰色.png" alt="enemy_HP_gray" class="enemy_HP_gray">
+        <p class ="buttonStop"></p>
+        <button id="reset">リセット</button>
     </div>
     <script src="move.js"></script>
 </body>
