@@ -148,3 +148,48 @@ img.fireball4 {
     height: 40px;
     z-index: 4;
 }
+
+img.iceball0 {
+    position: absolute;
+    top: 0;
+    left: -55px;
+    width: 45px; 
+    height: 25px;
+    z-index: 4;
+}
+
+img.iceball1 {
+    position: absolute;
+    top: 0;
+    left: -55px;
+    width: 45px; 
+    height: 25px;
+    z-index: 4;
+}
+
+img.iceball2 {
+    position: absolute;
+    top: 0;
+    left: -55px;
+    width: 45px; 
+    height: 25px;
+    z-index: 4;
+}
+
+img.iceball3 {
+    position: absolute;
+    top: 0;
+    left: -55px;
+    width: 45px; 
+    height: 25px;
+    z-index: 4;
+}
+
+img.iceball4 {
+    position: absolute;
+    top: 0;
+    left: -55px;
+    width: 45px; 
+    height: 25px;
+    z-index: 4;
+}

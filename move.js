@@ -5,6 +5,7 @@ const sword = document.querySelector('img.sword');
 const enemy = document.querySelector('img.enemy');
 const button = document.querySelector('button');
 const fireball = [document.querySelector('img.fireball0'), document.querySelector('img.fireball1'), document.querySelector('img.fireball2'), document.querySelector('img.fireball3'), document.querySelector('img.fireball4')];
+const iceball = [document.querySelector('img.iceball0'), document.querySelector('img.iceball1'), document.querySelector('img.iceball2'), document.querySelector('img.iceball3'), document.querySelector('img.iceball4')];
 
 
 // !!cssの値の取得が上手くいかなかったため、cssに対応する値を手入力!!
@@ -20,11 +21,15 @@ const position = {
     // 剣
     sword : {x : 305, y : 530, width : 35, height : 80, image : 'image/剣_右向き.png', cut : false},
     // 敵
-    enemy : {x : 670, y : 530, width : 70, height : 80},
+    enemy : {x : 670, y : 530, width : 70, height : 80, damage : false, freeze :  false},
     // ファイヤーボール初期位置
     firstFireball : {x : 1030, y : 0},
     // ファイヤーボール
     fireball : [{x : 1030, y : 0, width : 40, height : 40, exist : false}, {x : 1030, y : 0, width : 40, height : 40, exist : false}, {x : 1030, y : 0, width : 40, height : 40, exist : false}, {x : 1030, y : 0, width : 40, height : 40, exist : false}, {x : 1030, y : 0, width : 40, height : 40, exist : false}],
+    // アイスボール初期位置
+    firstIceball : {x : -55, y : 0},
+    // アイスボール
+    iceball : [{x : -55, y : 0, width : 45, height : 25, exist : false, right : true}, {x : -55, y : 0, width : 45, height : 25, exist : false, right : true}, {x : -55, y : 0, width : 45, height : 25, exist : false, right : true}, {x : -55, y : 0, width : 45, height : 25, exist : false, right : true}, {x : -55, y : 0, width : 45, height : 25, exist : false, right : true}],
     // 重なり判定
     overlap : (obj1, obj2) => {
         for (let i = 0; i < 2; i++) {
@@ -318,7 +323,7 @@ const attack = () => {
         }
         cnt++;
     }
-}
+};
 
 
 const connectPlayerSword = () => {
@@ -358,20 +363,27 @@ const connectPlayerSword = () => {
     sword.src = position.sword.image;
 };
 
-let capableHit = true;
+// let capableHit = true;
 
 const hit = () => {
     if (position.sword.cut) {
-        if (capableHit) {
+        // if (capableHit) {
+        if (! position.enemy.damage) {
             if (position.overlapEqual(position.sword, position.enemy)) {
+                console.log('ダメージ判定');
                 enemy.src = 'image/敵_ダメージ.png';
-                capableHit = false;
+                position.enemy.damage = true;
+                // capableHit = false;
+                position.enemy.freeze  = false;
             }
         }
     }
     else {
-        enemy.src = 'image/敵.png';
-        capableHit = true;
+        // if (! position.enemy.freeze) {
+            enemy.src = 'image/敵.png';
+            position.enemy.damage = false;
+            // capableHit = true;
+        // }
     }
 
     let cnt = 0;
@@ -405,43 +417,97 @@ const hit = () => {
         }
         cnt++;
     }
+    
+    if (position.enemy.freeze) {
+        position.enemy.image = 'image/敵_凍る.png';
+        enemy.src = position.enemy.image;
+    }
+};
+
+const iceHit = () => {
+    let cnt1 = 0;
+    for (let ib of position.iceball) {
+        let cnt2 = 0;
+        for (let fb of position.fireball) {
+            if (position.overlap(ib, fb)) {
+                ib.x = position.firstIceball.x;
+                ib.y = position.firstIceball.y;
+                iceball[cnt1].style.left = ib.x + 'px';
+                iceball[cnt1].style.top = ib.y + 'px';
+                ib.exist = false;
+
+                fb.x = position.firstFireball.x;
+                fb.y = position.firstFireball.y;
+                fireball[cnt2].style.left = fb.x + 'px';
+                fireball[cnt2].style.top = fb.y + 'px';
+                fb.exist = false;
+            }
+            cnt2++;
+        }
+
+        if (position.overlapEqual(ib, position.enemy)) {
+            // if (! position.enemy.freeze) {
+                ib.x = position.firstIceball.x;
+                ib.y = position.firstIceball.y;
+                iceball[cnt1].style.left = ib.x + 'px';
+                iceball[cnt1].style.top = ib.y + 'px';
+                ib.exist = false;
+
+                console.log('凍る');
+                position.enemy.freeze = true;
+                setTimeout(() => {
+                    if (position.enemy.freeze) {
+                        if(! position.enemy.damage) {
+                            position.enemy.image = 'image/敵.png';
+                            enemy.src = position.enemy.image;
+                            position.enemy.freeze = false;
+                        }
+                    }
+                }, 1000);
+            // }
+        }
+
+        cnt1++;
+    }
 };
 
 let rangeEnemyMove = 0.5;
 
 const enemyAction = () => {
-    let random = Math.random();
-    if (position.enemy.x < position.screen.x + position.screen.width * 0.1) {
-        rangeEnemyMove = 0.5;
-    }
-    else if (position.enemy.x > position.screen.x + position.screen.width * 0.9 - position.enemy.width) {
-        rangeEnemyMove = 0.2;
-    }
-    // 右移動
-    if (0 <= random && random < rangeEnemyMove) {
-        moveRightEnemy();
-    }
-    // 左移動
-    else if (rangeEnemyMove <= random && random < 0.7) {
-        moveLeftEnemy();
-    }
-    // ジャンプ
-    else if (0.7 <= random && random < 0.9) {
-        if (e_doublejump2) {
-            e_v = 20;
+    if (! position.enemy.freeze) {
+        let random = Math.random();
+        if (position.enemy.x < position.screen.x + position.screen.width * 0.1) {
+            rangeEnemyMove = 0.5;
         }
-        e_jump = true;
-        if (e_doublejump1 && e_doublejump2) {
-            e_v = 15;
-            e_d_t = 0;
-            e_doublejump2 = false;
+        else if (position.enemy.x > position.screen.x + position.screen.width * 0.9 - position.enemy.width) {
+            rangeEnemyMove = 0.2;
+        }
+        // 右移動
+        if (0 <= random && random < rangeEnemyMove) {
+            moveRightEnemy();
+        }
+        // 左移動
+        else if (rangeEnemyMove <= random && random < 0.7) {
+            moveLeftEnemy();
+        }
+        // ジャンプ
+        else if (0.7 <= random && random < 0.9) {
+            if (e_doublejump2) {
+                e_v = 20;
+            }
+            e_jump = true;
+            if (e_doublejump1 && e_doublejump2) {
+                e_v = 15;
+                e_d_t = 0;
+                e_doublejump2 = false;
+            }
+        }
+        // 攻撃
+        else if (0.9 <= random && random < 1) {
+            attack();
         }
     }
-    // 攻撃
-    else if (0.9 <= random && random < 1) {
-        attack();
-    }
-}
+};
 
 const fireballAction = () => {
     let cnt = 0;
@@ -473,7 +539,56 @@ const fireballAction = () => {
         }
         cnt++;
     }
-}
+};
+
+const iceballShot = () => {
+    let cnt = 0;
+    for (let ib of position.iceball) {
+        if (! ib.exist) {
+            if (position.player.right) {
+                ib.x = position.player.x + position.player.width;
+                ib.y = position.player.y;
+                ib.right = true;
+            }
+            else {
+                ib.x = position.player.x - ib.width;
+                ib.y = position.player.y;
+                ib.right = false;
+            }
+        
+            iceball[cnt].style.left = ib.x + 'px';
+            iceball[cnt].style.top = ib.y + 'px';
+            ib.exist = true;
+            return;
+        }
+        cnt++;
+    }
+};
+
+const iceballAction = () => {
+    let cnt = 0;
+    for (let ib of position.iceball) {
+        if (ib.exist) {
+            if (ib.right) {
+                ib.x += 6;
+            }
+            else {
+                ib.x -= 6;
+            }
+
+            iceball[cnt].style.left = ib.x + 'px';
+
+            if (position.overlap(ib, position.block[0]) || position.overlap(ib, position.block[1]) || position.overlap(ib, position.block[2]) || position.overlap(ib, position.block[3]) || position.overlap(ib, position.block[4]) || position.overlap(ib, position.wall[0]) || position.overlap(ib, position.wall[1])){
+                ib.x = position.firstIceball.x;
+                ib.y = position.firstIceball.y;
+                iceball[cnt].style.left = ib.x + 'px';
+                iceball[cnt].style.top = ib.y + 'px';
+                ib.exist = false;
+            }
+        }
+        cnt++;
+    }
+};
 
 // const finishInterval = () => {
 //     let cnt = 0;
@@ -496,20 +611,24 @@ const fireballAction = () => {
 let intervalID;
 let intervalID_CPS;
 let intervalID_hit;
+let intervalID_iceHit;
 let intervalID_gravityEnemy;
 let intervalID_enemyAction;
 let intervalID_fireball;
+let intervalID_iceball;
 // let intervalID_clearInterval;
 
 intervalID = setInterval(gravity, 40);
 intervalID_gravityEnemy = setInterval(gravityEnemy, 40);
 intervalID_CPS = setInterval(connectPlayerSword, 10);
 intervalID_hit = setInterval(hit, 10);
+intervalID_iceHit = setInterval(iceHit, 10);
 intervalID_enemyAction = setInterval(enemyAction, 100);
 intervalID_fireball = setInterval(fireballAction, 40);
+intervalID_iceball = setInterval(iceballAction, 40);
 // intervalID_clearInterval = setInterval(finishInterval, 10);
 
-
+iceballCoolTime = true;
 document.body.addEventListener('keydown', (event) => {
     if (event.code === 'KeyA') {
         moveLeft();
@@ -612,6 +731,13 @@ document.body.addEventListener('keydown', (event) => {
                 // player.src = position.player.image;
                 // position.sword.cut = false;
             }, 500);
+        }
+    }
+    if (event.code === 'KeyN') {
+        if (iceballCoolTime) {
+            iceballShot();
+            iceballCoolTime = false;
+            setTimeout(() => {iceballCoolTime = true}, 2000);
         }
     }
 });
