@@ -1,5 +1,6 @@
 const screen = document.querySelector('#screen');
 const background = document.querySelector('img.background');
+const h1 = document.querySelector('h1'); 
 const player = document.querySelector('img.player');
 const sword = document.querySelector('img.sword');
 const enemy = document.querySelector('img.enemy');
@@ -787,8 +788,9 @@ document.body.addEventListener('keydown', (event) => {
     }
 });
 
+let finishGamePass = true;
 const finishGame = () => {
-    if (position.player.hitpoint <= 0 || position.enemy.hitpoint <= 0) {
+    if (position.player.hitpoint <= 0 || position.enemy.hitpoint <= 0) { 
         clearInterval(intervalID_gravityPlayer);
         clearInterval(intervalID_CPS);
         clearInterval(intervalID_hit);
@@ -798,6 +800,75 @@ const finishGame = () => {
         clearInterval(intervalID_fireball);
         clearInterval(intervalID_iceball);
         clearInterval(intervalID_knockBack);
+
+        if (position.player.hitpoint <= 0 && position.enemy.hitpoint <= 0) {
+            position.player.image = 'image/プレイヤー負け.png';
+            position.enemy.image = 'image/敵負け.png';
+            if (finishGamePass) {
+                const tmpP = position.player.width;
+                position.player.width = position.player.height;
+                position.player.height = tmpP;
+                const tmpE = position.enemy.width;
+                position.enemy.width = position.enemy.height;
+                position.enemy.height = tmpE;
+            }
+            h1.innerText = '引き分け';
+        }
+        else if (position.player.hitpoint <= 0) {
+            position.player.image = 'image/プレイヤー負け.png';
+            position.enemy.image = 'image/敵勝ち.png';
+            if (finishGamePass) {
+                const tmpP = position.player.width;
+                position.player.width = position.player.height;
+                position.player.height = tmpP;
+            }
+            h1.innerText = '負け';
+        }
+        else if (position.enemy.hitpoint <= 0) {
+            position.player.image = 'image/プレイヤー勝ち.png';
+            position.enemy.image = 'image/敵負け.png';
+            if (finishGamePass) {
+                const tmpE = position.enemy.width;
+                position.enemy.width = position.enemy.height;
+                position.enemy.height = tmpE;
+            }
+            h1.innerText = '勝ち';
+        }
+        player.src = position.player.image;
+        enemy.src = position.enemy.image;
+        player.style.width = position.player.width + 'px';
+        player.style.height = position.player.height + 'px';
+        enemy.style.width = position.enemy.width + 'px';
+        enemy.style.height = position.enemy.height + 'px';
+
+        position.sword.width = 0;
+        position.sword.height = 0;
+        sword.style.width = position.sword.width + 'px';
+        sword.style.height = position.sword.height + 'px';
+
+        let cnt = 0;
+        for (fb of position.fireball) {
+            if (fb.exist) {
+                fb.x = position.firstFireball.x;
+                fb.y = position.firstFireball.y;
+                fb.exist = false;
+                fireball[cnt].style.left = fb.x + 'px';
+                fireball[cnt].style.top = fb.y + 'px';
+            }
+            cnt++;
+        }
+        cnt = 0;
+        for (ib of position.iceball) {
+            if (ib.exist) {
+                ib.x = position.firstIceball.x;
+                ib.y = position.firstIceball.y;
+                ib.exist = false;
+                iceball[cnt].style.left = ib.x + 'px';
+                iceball[cnt].style.top = ib.y + 'px';
+            }
+            cnt++;
+        }
+        finishGamePass = false;
     }
 };
 
