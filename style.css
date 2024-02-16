@@ -193,3 +193,57 @@ img.iceball4 {
     height: 25px;
     z-index: 4;
 }
+
+img.player_picture {
+    position: absolute;
+    top: 0;
+    left: -230px;
+    width: 200px; 
+    height: 280px;
+    z-index: 5;
+}
+
+img.player_HP_green {
+    position: absolute;
+    top: 290px;
+    left: -230px;
+    width: 200px; 
+    height: 20px;
+    z-index: 6;
+}
+
+img.player_HP_gray {
+    position: absolute;
+    top: 290px;
+    left: -230px;
+    width: 200px; 
+    height: 20px;
+    z-index: 5;
+}
+
+img.enemy_picture {
+    position: absolute;
+    top: 0;
+    left: 1030px;
+    width: 200px; 
+    height: 280px;
+    z-index: 5;
+}
+
+img.enemy_HP_green {
+    position: absolute;
+    top: 290px;
+    left: 1030px;
+    width: 200px; 
+    height: 20px;
+    z-index: 6;
+}
+
+img.enemy_HP_gray {
+    position: absolute;
+    top: 290px;
+    left: 1030px;
+    width: 200px; 
+    height: 20px;
+    z-index: 5;
+}
