@@ -285,9 +285,20 @@ img.enemy_HP_gray {
     z-index: 7;
 }
 
-button.left_button {
+button.ice_button {
     position: absolute;
     top: 340px;
+    left: -180px;
+    width: 150px; 
+    height: 150px;
+    z-index: 6;
+    border: none;
+    background: transparent;
+}
+
+button.left_button {
+    position: absolute;
+    top: 510px;
     left: -180px;
     width: 150px; 
     height: 150px;
@@ -298,30 +309,8 @@ button.left_button {
 
 button.jump_button {
     position: absolute;
-    top: 510px;
-    left: -180px;
-    width: 150px; 
-    height: 150px;
-    z-index: 6;
-    border: none;
-    background: transparent;
-}
-
-button.ice_button {
-    position: absolute;
     top: 680px;
     left: -180px;
-    width: 150px; 
-    height: 150px;
-    z-index: 6;
-    border: none;
-    background: transparent;
-}
-
-button.right_button {
-    position: absolute;
-    top: 340px;
-    left: 1030px;
     width: 150px; 
     height: 150px;
     z-index: 6;
@@ -331,6 +320,17 @@ button.right_button {
 
 button.sword_button {
     position: absolute;
+    top: 340px;
+    left: 1030px;
+    width: 150px; 
+    height: 150px;
+    z-index: 6;
+    border: none;
+    background: transparent;
+}
+
+button.right_button {
+    position: absolute;
     top: 510px;
     left: 1030px;
     width: 150px; 
@@ -340,7 +340,7 @@ button.sword_button {
     background: transparent;
 }
 
-img.left_button {
+img.ice_button {
     position: absolute;
     top: 340px;
     left: -180px;
@@ -349,7 +349,7 @@ img.left_button {
     z-index: 5;
 }
 
-img.jump_button {
+img.left_button {
     position: absolute;
     top: 510px;
     left: -180px;
@@ -358,7 +358,7 @@ img.jump_button {
     z-index: 5;
 }
 
-img.ice_button {
+img.jump_button {
     position: absolute;
     top: 680px;
     left: -180px;
@@ -367,7 +367,7 @@ img.ice_button {
     z-index: 5;
 }
 
-img.right_button {
+img.sword_button {
     position: absolute;
     top: 340px;
     left: 1030px;
@@ -376,7 +376,7 @@ img.right_button {
     z-index: 5;
 }
 
-img.sword_button {
+img.right_button {
     position: absolute;
     top: 510px;
     left: 1030px;
