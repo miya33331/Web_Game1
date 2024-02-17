@@ -929,9 +929,7 @@ let intervalID_iceBotton;
 
 
 leftBotton.addEventListener('touchstart', () => {
-    console.log('クリック');
     intervalID_leftBotton = setInterval(() => {
-        console.log('インターバルクリック');
         moveLeft();
         if (! position.sword.cut || position.player.right) {
             if(! position.player.damage){
@@ -965,68 +963,59 @@ rightBotton.addEventListener('touchstart', () => {
 });
 
 jumpBotton.addEventListener('touchstart', () => {
-    intervalID_jumpBotton = setInterval(() => {
-        if (doublejump2) {
-            v = 20;
-        }
-        jump = true;
-        if (doublejump1 && doublejump2) {
-            v = 15;
-            d_t = 0;
-            doublejump2 = false;
-        }
-    }, 40);
+    if (doublejump2) {
+        v = 20;
+    }
+    jump = true;
+    if (doublejump1 && doublejump2) {
+        v = 15;
+        d_t = 0;
+        doublejump2 = false;
+    }
 });
 
 swordBotton.addEventListener('touchstart', () => {
-    intervalID_swordBotton = setInterval(() => {
-        if(!position.sword.cut){
-            if(position.player.right) {
-                if(! position.player.damage){
-                    position.player.image = 'image/プレイヤー_右向き.png';
-                }
-                else {
-                    position.player.image = 'image/プレイヤー_右向き_ダメージ.png';
-                }
-                player.src = position.player.image;
-                position.player.right = true;
-                position.sword.cut = true;
+    if(!position.sword.cut){
+        if(position.player.right) {
+            if(! position.player.damage){
+                position.player.image = 'image/プレイヤー_右向き.png';
             }
-            else if(! position.player.right) {
-                if(! position.player.damage){
-                    position.player.image = 'image/プレイヤー_左向き.png';
-                }
-                else {
-                    position.player.image = 'image/プレイヤー_左向き_ダメージ.png';
-                }
-                player.src = position.player.image;
-                position.player.right = false;
-                position.sword.cut = true;
+            else {
+                position.player.image = 'image/プレイヤー_右向き_ダメージ.png';
             }
-            setTimeout(() => {
-                if (position.sword.cut) {
-                    position.sword.cut = false;
-                }
-            }, 500);
+            player.src = position.player.image;
+            position.player.right = true;
+            position.sword.cut = true;
         }
-    }, 40);
+        else if(! position.player.right) {
+            if(! position.player.damage){
+                position.player.image = 'image/プレイヤー_左向き.png';
+            }
+            else {
+                position.player.image = 'image/プレイヤー_左向き_ダメージ.png';
+            }
+            player.src = position.player.image;
+            position.player.right = false;
+            position.sword.cut = true;
+        }
+        setTimeout(() => {
+            if (position.sword.cut) {
+                position.sword.cut = false;
+            }
+        }, 500);
+    }
 });
 
 iceBotton.addEventListener('touchstart', () => {
-    intervalID_iceBotton = setInterval(() => {
-        if (iceballCoolTime) {
-            iceballShot();
-            iceballCoolTime = false;
-            setTimeout(() => {iceballCoolTime = true}, 2000);
-        }
-    }, 40);
+    if (iceballCoolTime) {
+        iceballShot();
+        iceballCoolTime = false;
+        setTimeout(() => {iceballCoolTime = true}, 2000);
+    }
 });
 
 leftBotton.addEventListener('touchend', () => {clearInterval(intervalID_leftBotton)});
 rightBotton.addEventListener('touchend', () => {clearInterval(intervalID_rightBotton)});
-jumpBotton.addEventListener('touchend', () => {clearInterval(intervalID_jumpBotton)});
-swordBotton.addEventListener('touchend', () => {clearInterval(intervalID_swordBotton)});
-iceBotton.addEventListener('touchend', () => {clearInterval(intervalID_iceBotton)});
 
 
 
