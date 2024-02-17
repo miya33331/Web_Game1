@@ -16,6 +16,7 @@ const rightBotton = document.querySelector('button.right_button');
 const jumpBotton = document.querySelector('button.jump_button');
 const swordBotton = document.querySelector('button.sword_button');
 const iceBotton = document.querySelector('button.ice_button');
+const heart = document.querySelector('img.heart');
 
 
 let clearIntervalNecessary = false;
@@ -73,6 +74,7 @@ const initialization = () => {
         clearInterval(intervalID_fireball);
         clearInterval(intervalID_iceball);
         clearInterval(intervalID_knockBack);
+        clearInterval(intervalID_heart);
 
         clearIntervalNecessary = false;
     }
@@ -86,6 +88,7 @@ const initialization = () => {
     intervalID_fireball = setInterval(fireballAction, 40);
     intervalID_iceball = setInterval(iceballAction, 40);
     intervalID_knockBack = setInterval(knockBack, 40);
+    intervalID_heart = setInterval(heartAction, 20000);
 
     clearIntervalNecessary = true;
 }
@@ -108,19 +111,23 @@ let position = {
     // 壁
     wall : [{x : -10, y : 0, width : 20, height : 830}, {x : 1000, y : 0, width : 20, height : 830}],
     // プレイヤー
-    player : {x : 270, y : 530, width : 35, height : 80, image : 'image/プレイヤー_右向き.png', right : true, damage : false, hitpoint : 200},
+    player : {x : 270, y : 570, width : 30, height : 60, image : 'image/プレイヤー_右向き.png', right : true, damage : false, hitpoint : 200},
     // 剣
-    sword : {x : 305, y : 530, width : 35, height : 80, image : 'image/剣_右向き.png', cut : false},
+    sword : {x : 300, y : 570, width : 30, height : 60, image : 'image/剣_右向き.png', cut : false},
     // 敵
     enemy : {x : 670, y : 530, width : 70, height : 80, damage : false, freeze :  false, hitpoint : 200},
     // ファイヤーボール初期位置
     firstFireball : {x : 1030, y : 0},
     // ファイヤーボール
-    fireball : [{x : 1030, y : 0, width : 40, height : 40, exist : false}, {x : 1030, y : 0, width : 40, height : 40, exist : false}, {x : 1030, y : 0, width : 40, height : 40, exist : false}, {x : 1030, y : 0, width : 40, height : 40, exist : false}, {x : 1030, y : 0, width : 40, height : 40, exist : false}],
+    fireball : [{x : 1030, y : 0, width : 40, height : 40, exist : false, pursue : false, moveX : 0, moveY : 0}, {x : 1030, y : 0, width : 40, height : 40, exist : false, pursue : false, moveX : 0, moveY : 0}, {x : 1030, y : 0, width : 40, height : 40, exist : false, pursue : false, moveX : 0, moveY : 0}, {x : 1030, y : 0, width : 40, height : 40, exist : false, pursue : false, moveX : 0, moveY : 0}, {x : 1030, y : 0, width : 40, height : 40, exist : false, pursue : false, moveX : 0, moveY : 0}],
     // アイスボール初期位置
     firstIceball : {x : -65, y : 0},
     // アイスボール
     iceball : [{x : -65, y : 0, width : 45, height : 25, exist : false, right : true}, {x : -65, y : 0, width : 45, height : 25, exist : false, right : true}, {x : -65, y : 0, width : 45, height : 25, exist : false, right : true}, {x : -65, y : 0, width : 45, height : 25, exist : false, right : true}, {x : -65, y : 0, width : 45, height : 25, exist : false, right : true}],
+    // ハート初期位置
+    firstHeart : {x : -65, y : 40},
+    // ハート
+    heart : {x : -65, y : 40, width : 40, height : 40, exist : false},
     // 重なり判定
     overlap : (obj1, obj2) => {
         for (let i = 0; i < 2; i++) {
@@ -181,19 +188,23 @@ const firstPosition = {
     // 壁
     wall : [{x : -10, y : 0, width : 20, height : 830}, {x : 1000, y : 0, width : 20, height : 830}],
     // プレイヤー
-    player : {x : 270, y : 530, width : 35, height : 80, image : 'image/プレイヤー_右向き.png', right : true, damage : false, hitpoint : 200},
+    player : {x : 270, y : 570, width : 30, height : 60, image : 'image/プレイヤー_右向き.png', right : true, damage : false, hitpoint : 200},
     // 剣
-    sword : {x : 305, y : 530, width : 35, height : 80, image : 'image/剣_右向き.png', cut : false},
+    sword : {x : 300, y : 570, width : 30, height : 60, image : 'image/剣_右向き.png', cut : false},
     // 敵
     enemy : {x : 670, y : 530, width : 70, height : 80, damage : false, freeze :  false, hitpoint : 200},
     // ファイヤーボール初期位置
     firstFireball : {x : 1030, y : 0},
     // ファイヤーボール
-    fireball : [{x : 1030, y : 0, width : 40, height : 40, exist : false}, {x : 1030, y : 0, width : 40, height : 40, exist : false}, {x : 1030, y : 0, width : 40, height : 40, exist : false}, {x : 1030, y : 0, width : 40, height : 40, exist : false}, {x : 1030, y : 0, width : 40, height : 40, exist : false}],
+    fireball : [{x : 1030, y : 0, width : 40, height : 40, exist : false, pursue : false, moveX : 0, moveY : 0}, {x : 1030, y : 0, width : 40, height : 40, exist : false, pursue : false, moveX : 0, moveY : 0}, {x : 1030, y : 0, width : 40, height : 40, exist : false, pursue : false, moveX : 0, moveY : 0}, {x : 1030, y : 0, width : 40, height : 40, exist : false, pursue : false, moveX : 0, moveY : 0}, {x : 1030, y : 0, width : 40, height : 40, exist : false, pursue : false, moveX : 0, moveY : 0}],
     // アイスボール初期位置
     firstIceball : {x : -65, y : 0},
     // アイスボール
     iceball : [{x : -65, y : 0, width : 45, height : 25, exist : false, right : true}, {x : -65, y : 0, width : 45, height : 25, exist : false, right : true}, {x : -65, y : 0, width : 45, height : 25, exist : false, right : true}, {x : -65, y : 0, width : 45, height : 25, exist : false, right : true}, {x : -65, y : 0, width : 45, height : 25, exist : false, right : true}],
+    // ハート初期位置
+    firstHeart : {x : -65, y : 40},
+    // ハート
+    heart : {x : -65, y : 40, width : 40, height : 40, exist : false},    
     // 重なり判定
     overlap : (obj1, obj2) => {
         for (let i = 0; i < 2; i++) {
@@ -484,6 +495,7 @@ const attack = () => {
             fireball[cnt].style.left = fb.x + 'px';
             fireball[cnt].style.top = fb.y + 'px';
             fb.exist = true;
+            fb.pursue = true;
             return;
         }
         cnt++;
@@ -539,10 +551,10 @@ const hit = () => {
                 position.enemy.damage = true;
                 // capableHit = false;
                 if (position.enemy.freeze) {
-                    position.enemy.hitpoint -= 40;
+                    position.enemy.hitpoint -= 12;
                 }
                 else {
-                    position.enemy.hitpoint -= 10;
+                    position.enemy.hitpoint -= 4;
                 }
                 position.enemy.freeze  = false;
                 enemyHPBar.style.width = position.enemy.hitpoint + 'px';
@@ -597,6 +609,26 @@ const hit = () => {
     if (position.enemy.freeze) {
         position.enemy.image = 'image/敵_凍る.png';
         enemy.src = position.enemy.image;
+    }
+
+    if (position.overlap(position.player, position.heart)) {
+        position.player.hitpoint += 20;
+        playerHPBar.style.width = position.player.hitpoint + 'px';
+        position.heart.x = position.firstHeart.x;
+        position.heart.y = position.firstHeart.y;
+        heart.style.left = position.heart.x + 'px';
+        heart.style.top = position.heart.y + 'px';
+        position.heart.exist = false;
+    }
+
+    if (position.overlap(position.enemy, position.heart)) {
+        position.enemy.hitpoint += 8;
+        enemyHPBar.style.width = position.enemy.hitpoint + 'px';
+        position.heart.x = position.firstHeart.x;
+        position.heart.y = position.firstHeart.y;
+        heart.style.left = position.heart.x + 'px';
+        heart.style.top = position.heart.y + 'px';
+        position.heart.exist = false;
     }
 };
 
@@ -689,17 +721,28 @@ const fireballAction = () => {
     let cnt = 0;
     for (let fb of position.fireball) {
         if (fb.exist) {
-            if (fb.x > position.player.x) {
-                fb.x -= 3;
+            if (fb.pursue) {
+                if (fb.x > position.player.x) {
+                    fb.x -= 3;
+                    fb.moveX = -3;
+                }
+                else if (fb.x < position.player.x) {
+                    fb.x += 3;
+                    fb.moveX = 3;
+                }
+                if (fb.y > position.player.y) {
+                    fb.y -= 3;
+                    fb.moveY = -3;
+                }
+                else if (fb.y < position.player.y) {
+                    fb.y += 3;
+                    fb.moveY = 3;
+                }
+                setTimeout(() => {fb.pursue = false;}, 1000);
             }
-            else if (fb.x < position.player.x) {
-                fb.x += 3;
-            }
-            if (fb.y > position.player.y) {
-                fb.y -= 3;
-            }
-            else if (fb.y < position.player.y) {
-                fb.y += 3;
+            else {
+                fb.x += fb.moveX;
+                fb.y += fb.moveY;
             }
 
             fireball[cnt].style.left = fb.x + 'px';
@@ -711,6 +754,9 @@ const fireballAction = () => {
                 fireball[cnt].style.left = fb.x + 'px';
                 fireball[cnt].style.top = fb.y + 'px';
                 fb.exist = false;
+                fb.pursue = false;
+                fb.moveX = 0;
+                fb.moveY = 0;
             }
         }
         cnt++;
@@ -813,6 +859,27 @@ const knockBack = () => {
     }
 }
 
+const heartAction = ()  => {
+
+    let randomX = Math.random() * 960;
+    let randomY = Math.random() * 790; 
+    
+    position.heart.x = randomX;
+    position.heart.y = randomY;
+    heart.style.left = position.heart.x + 'px';
+    heart.style.top = position.heart.y + 'px';
+
+    position.heart.exist = true;
+
+    if (position.overlap(position.heart, position.block[0]) || position.overlap(position.heart, position.block[1]) || position.overlap(position.heart, position.block[2]) || position.overlap(position.heart, position.block[3]) || position.overlap(position.heart, position.block[4]) || position.overlap(position.heart, position.wall[0]) || position.overlap(position.heart, position.wall[1])){
+        position.heart.x = position.firstHeart.x;
+        position.heart.y = position.firstHeart.y;
+        heart.style.left = position.heart.x + 'px';
+        heart.style.top = position.heart.y + 'px';
+        position.heart.exist = false;
+    }
+}
+
 
 let intervalID_gravityPlayer;
 let intervalID_CPS;
@@ -823,6 +890,7 @@ let intervalID_enemyAction;
 let intervalID_fireball;
 let intervalID_iceball;
 let intervalID_knockBack;
+let intervalID_heart;
 // let intervalID_clearInterval;
 
 /////////////////////////////////////////////////////////////
@@ -1031,6 +1099,7 @@ const finishGame = () => {
         clearInterval(intervalID_fireball);
         clearInterval(intervalID_iceball);
         clearInterval(intervalID_knockBack);
+        clearInterval(intervalID_heart);
 
         if (position.player.hitpoint <= 0 && position.enemy.hitpoint <= 0) {
             position.player.image = 'image/プレイヤー負け.png';
@@ -1076,6 +1145,9 @@ const finishGame = () => {
         position.sword.height = 0;
         sword.style.width = position.sword.width + 'px';
         sword.style.height = position.sword.height + 'px';
+
+        playerHPBar.style.width = position.player.hitpoint + 'px';
+        enemyHPBar.style.width = position.enemy.hitpoint + 'px';
 
         let cnt = 0;
         for (fb of position.fireball) {
