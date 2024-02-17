@@ -17,6 +17,9 @@ const jumpBotton = document.querySelector('button.jump_button');
 const swordBotton = document.querySelector('button.sword_button');
 const iceBotton = document.querySelector('button.ice_button');
 const heart = document.querySelector('img.heart');
+const deathblow = document.querySelector('img.deathblow');
+const enemy_picture = document.querySelector('img.enemy_picture');
+
 
 
 let clearIntervalNecessary = false;
@@ -120,6 +123,10 @@ let position = {
     firstFireball : {x : 1030, y : 0},
     // ファイヤーボール
     fireball : [{x : 1030, y : 0, width : 40, height : 40, exist : false, pursue : false, moveX : 0, moveY : 0}, {x : 1030, y : 0, width : 40, height : 40, exist : false, pursue : false, moveX : 0, moveY : 0}, {x : 1030, y : 0, width : 40, height : 40, exist : false, pursue : false, moveX : 0, moveY : 0}, {x : 1030, y : 0, width : 40, height : 40, exist : false, pursue : false, moveX : 0, moveY : 0}, {x : 1030, y : 0, width : 40, height : 40, exist : false, pursue : false, moveX : 0, moveY : 0}],
+    // 敵必殺技初期位置
+    firstDeathblow : {x : 1030, y : 200},
+    // 敵必殺技
+    deathblow : {x : 1030, y : 200, width : 400, height : 40, exist : false, charge : false},
     // アイスボール初期位置
     firstIceball : {x : -65, y : 0},
     // アイスボール
@@ -197,6 +204,10 @@ const firstPosition = {
     firstFireball : {x : 1030, y : 0},
     // ファイヤーボール
     fireball : [{x : 1030, y : 0, width : 40, height : 40, exist : false, pursue : false, moveX : 0, moveY : 0}, {x : 1030, y : 0, width : 40, height : 40, exist : false, pursue : false, moveX : 0, moveY : 0}, {x : 1030, y : 0, width : 40, height : 40, exist : false, pursue : false, moveX : 0, moveY : 0}, {x : 1030, y : 0, width : 40, height : 40, exist : false, pursue : false, moveX : 0, moveY : 0}, {x : 1030, y : 0, width : 40, height : 40, exist : false, pursue : false, moveX : 0, moveY : 0}],
+    // 敵必殺技初期位置
+    firstDeathblow : {x : 1030, y : 200},
+    // 敵必殺技
+    deathblow : {x : 1030, y : 200, width : 400, height : 40, exist : false},    
     // アイスボール初期位置
     firstIceball : {x : -65, y : 0},
     // アイスボール
@@ -564,9 +575,11 @@ const hit = () => {
     }
     else {
         // if (! position.enemy.freeze) {
+        if (! position.deathblow.charge) {
             enemy.src = 'image/敵.png';
             position.enemy.damage = false;
             // capableHit = true;
+        }
         // }
     }
 
@@ -630,6 +643,14 @@ const hit = () => {
         heart.style.top = position.heart.y + 'px';
         position.heart.exist = false;
     }
+
+    if (position.deathblow.exist) {
+        if (position.overlap(position.player, position.deathblow)) {
+            position.player.hitpoint -= 30;
+            playerHPBar.style.width = position.player.hitpoint + 'px';
+            position.deathblow.exist = false;
+        }
+    }
 };
 
 const iceHit = () => {
@@ -682,7 +703,7 @@ const iceHit = () => {
 let rangeEnemyMove = 0.5;
 
 const enemyAction = () => {
-    if (! position.enemy.freeze) {
+    if (! position.enemy.freeze && ! position.deathblow.charge) {
         let random = Math.random();
         if (position.enemy.x < position.screen.x + position.screen.width * 0.1) {
             rangeEnemyMove = 0.5;
@@ -711,11 +732,43 @@ const enemyAction = () => {
             }
         }
         // 攻撃
-        else if (0.9 <= random && random < 1) {
+        else if (0.9 <= random && random < 0.97) {
             attack();
+        }
+        else if (0.97 <= random && random < 1) {
+            deathblowAction();
         }
     }
 };
+
+const deathblowAction = () => {
+    if (! position.deathblow.exist) {
+        let fixedPositionX = position.enemy.x;
+        // let fixedPositionY = position.enemy.y;
+        position.deathblow.charge = true;
+        enemy.src = 'image/敵勝ち.png'; // 'image/チャージ.png';
+        enemy_picture.src = 'image/敵勝ち.png'; 
+        setTimeout(() => {
+            position.enemy.x = fixedPositionX;
+            // position.enemy.y = fixedPositionY;
+            position.deathblow.charge = false;
+            position.deathblow.x = position.enemy.x - (position.deathblow.width - position.enemy.width) / 2;
+            position.deathblow.y = position.enemy.y + position.enemy.height - position.deathblow.height;
+            deathblow.style.left = position.deathblow.x + 'px';
+            deathblow.style.top = position.deathblow.y + 'px';
+            enemy.src = 'image/敵.png';
+            enemy_picture.src = 'image/敵.png';
+            position.deathblow.exist = true;
+            setTimeout(() => {
+                position.deathblow.x = position.firstDeathblow.x;
+                position.deathblow.y = position.firstDeathblow.y;
+                deathblow.style.left = position.deathblow.x + 'px';
+                deathblow.style.top = position.deathblow.y + 'px';
+                position.deathblow.exist = false;
+            }, 1500);
+        }, 2000);
+    }
+}
 
 const fireballAction = () => {
     let cnt = 0;

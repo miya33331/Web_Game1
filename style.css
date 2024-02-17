@@ -393,3 +393,12 @@ img.heart {
     height: 40px;
     z-index: 2;
 }
+
+img.deathblow {
+    position: absolute;
+    top: 200px;
+    left: 1030px;
+    width: 400px; 
+    height: 40px;
+    z-index: 2;
+}
