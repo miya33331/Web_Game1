@@ -928,7 +928,7 @@ let intervalID_swordBotton;
 let intervalID_iceBotton;
 
 
-leftBotton.addEventListener('ontouchstart', () => {
+leftBotton.addEventListener('touchstart', () => {
     console.log('クリック');
     intervalID_leftBotton = setInterval(() => {
         console.log('インターバルクリック');
@@ -947,7 +947,7 @@ leftBotton.addEventListener('ontouchstart', () => {
     }, 40);
 });
 
-rightBotton.addEventListener('ontouchstart', () => {
+rightBotton.addEventListener('touchstart', () => {
     intervalID_rightBotton = setInterval(() => {
         moveRight();
         if (! position.sword.cut || ! position.player.right) {
@@ -964,7 +964,7 @@ rightBotton.addEventListener('ontouchstart', () => {
     }, 40);
 });
 
-jumpBotton.addEventListener('ontouchstart', () => {
+jumpBotton.addEventListener('touchstart', () => {
     intervalID_jumpBotton = setInterval(() => {
         if (doublejump2) {
             v = 20;
@@ -978,7 +978,7 @@ jumpBotton.addEventListener('ontouchstart', () => {
     }, 40);
 });
 
-swordBotton.addEventListener('ontouchstart', () => {
+swordBotton.addEventListener('touchstart', () => {
     intervalID_swordBotton = setInterval(() => {
         if(!position.sword.cut){
             if(position.player.right) {
@@ -1012,7 +1012,7 @@ swordBotton.addEventListener('ontouchstart', () => {
     }, 40);
 });
 
-iceBotton.addEventListener('ontouchstart', () => {
+iceBotton.addEventListener('touchstart', () => {
     intervalID_iceBotton = setInterval(() => {
         if (iceballCoolTime) {
             iceballShot();
@@ -1022,11 +1022,11 @@ iceBotton.addEventListener('ontouchstart', () => {
     }, 40);
 });
 
-leftBotton.addEventListener('ontouchend', () => {clearInterval(intervalID_leftBotton)});
-rightBotton.addEventListener('ontouchend', () => {clearInterval(intervalID_rightBotton)});
-jumpBotton.addEventListener('ontouchend', () => {clearInterval(intervalID_jumpBotton)});
-swordBotton.addEventListener('ontouchend', () => {clearInterval(intervalID_swordBotton)});
-iceBotton.addEventListener('ontouchend', () => {clearInterval(intervalID_iceBotton)});
+leftBotton.addEventListener('touchend', () => {clearInterval(intervalID_leftBotton)});
+rightBotton.addEventListener('touchend', () => {clearInterval(intervalID_rightBotton)});
+jumpBotton.addEventListener('touchend', () => {clearInterval(intervalID_jumpBotton)});
+swordBotton.addEventListener('touchend', () => {clearInterval(intervalID_swordBotton)});
+iceBotton.addEventListener('touchend', () => {clearInterval(intervalID_iceBotton)});
 
 
 
