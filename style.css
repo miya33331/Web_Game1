@@ -285,6 +285,61 @@ img.enemy_HP_gray {
     z-index: 7;
 }
 
+button.left_button {
+    position: absolute;
+    top: 340px;
+    left: -180px;
+    width: 150px; 
+    height: 150px;
+    z-index: 6;
+    border: none;
+    background: transparent;
+}
+
+button.jump_button {
+    position: absolute;
+    top: 510px;
+    left: -180px;
+    width: 150px; 
+    height: 150px;
+    z-index: 6;
+    border: none;
+    background: transparent;
+}
+
+button.ice_button {
+    position: absolute;
+    top: 680px;
+    left: -180px;
+    width: 150px; 
+    height: 150px;
+    z-index: 6;
+    border: none;
+    background: transparent;
+}
+
+button.right_button {
+    position: absolute;
+    top: 340px;
+    left: 1030px;
+    width: 150px; 
+    height: 150px;
+    z-index: 6;
+    border: none;
+    background: transparent;
+}
+
+button.sword_button {
+    position: absolute;
+    top: 510px;
+    left: 1030px;
+    width: 150px; 
+    height: 150px;
+    z-index: 6;
+    border: none;
+    background: transparent;
+}
+
 img.left_button {
     position: absolute;
     top: 340px;
@@ -329,4 +384,3 @@ img.sword_button {
     height: 150px;
     z-index: 5;
 }
-

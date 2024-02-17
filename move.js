@@ -11,11 +11,11 @@ const iceball = [document.querySelector('img.iceball0'), document.querySelector(
 const playerHPBar = document.querySelector('img.player_HP_green');
 const enemyHPBar = document.querySelector('img.enemy_HP_green');
 const reset = document.querySelector('#reset');
-const leftBotton = document.querySelector('img.left_button');
-const rightBotton = document.querySelector('img.right_button');
-const jumpBotton = document.querySelector('img.jump_button');
-const swordBotton = document.querySelector('img.sword_button');
-const iceBotton = document.querySelector('img.ice_button');
+const leftBotton = document.querySelector('button.left_button');
+const rightBotton = document.querySelector('button.right_button');
+const jumpBotton = document.querySelector('button.jump_button');
+const swordBotton = document.querySelector('button.sword_button');
+const iceBotton = document.querySelector('button.ice_button');
 
 
 let clearIntervalNecessary = false;
