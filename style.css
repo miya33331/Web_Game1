@@ -116,7 +116,7 @@ img.block4 {
 img.wall0 {
     position: absolute;
     top: 0;
-    left: -10px;
+    left: -20px;
     width: 20px; 
     height: 830px;
     z-index: 2;
@@ -179,7 +179,7 @@ img.fireball4 {
 img.iceball0 {
     position: absolute;
     top: 0;
-    left: -55px;
+    left: -65px;
     width: 45px; 
     height: 25px;
     z-index: 4;
@@ -188,7 +188,7 @@ img.iceball0 {
 img.iceball1 {
     position: absolute;
     top: 0;
-    left: -55px;
+    left: -65px;
     width: 45px; 
     height: 25px;
     z-index: 4;
@@ -197,7 +197,7 @@ img.iceball1 {
 img.iceball2 {
     position: absolute;
     top: 0;
-    left: -55px;
+    left: -65px;
     width: 45px; 
     height: 25px;
     z-index: 4;
@@ -206,7 +206,7 @@ img.iceball2 {
 img.iceball3 {
     position: absolute;
     top: 0;
-    left: -55px;
+    left: -65px;
     width: 45px; 
     height: 25px;
     z-index: 4;
@@ -215,7 +215,7 @@ img.iceball3 {
 img.iceball4 {
     position: absolute;
     top: 0;
-    left: -55px;
+    left: -65px;
     width: 45px; 
     height: 25px;
     z-index: 4;
@@ -285,12 +285,48 @@ img.enemy_HP_gray {
     z-index: 7;
 }
 
-p.buttonStop {
+img.left_button {
     position: absolute;
-    top: 30px;
-    left: 50px;
-    width: 1000px; 
-    height: 40px;
-    z-index: 8;
+    top: 340px;
+    left: -180px;
+    width: 150px; 
+    height: 150px;
+    z-index: 5;
+}
+
+img.jump_button {
+    position: absolute;
+    top: 510px;
+    left: -180px;
+    width: 150px; 
+    height: 150px;
+    z-index: 5;
+}
+
+img.ice_button {
+    position: absolute;
+    top: 680px;
+    left: -180px;
+    width: 150px; 
+    height: 150px;
+    z-index: 5;
+}
+
+img.right_button {
+    position: absolute;
+    top: 340px;
+    left: 1030px;
+    width: 150px; 
+    height: 150px;
+    z-index: 5;
+}
+
+img.sword_button {
+    position: absolute;
+    top: 510px;
+    left: 1030px;
+    width: 150px; 
+    height: 150px;
+    z-index: 5;
 }
 

@@ -11,7 +11,12 @@ const iceball = [document.querySelector('img.iceball0'), document.querySelector(
 const playerHPBar = document.querySelector('img.player_HP_green');
 const enemyHPBar = document.querySelector('img.enemy_HP_green');
 const reset = document.querySelector('#reset');
-const buttonStop = document.querySelector('p.buttonStop');
+const leftBotton = document.querySelector('img.left_button');
+const rightBotton = document.querySelector('img.right_button');
+const jumpBotton = document.querySelector('img.jump_button');
+const swordBotton = document.querySelector('img.sword_button');
+const iceBotton = document.querySelector('img.ice_button');
+
 
 let clearIntervalNecessary = false;
 
@@ -113,9 +118,9 @@ let position = {
     // ファイヤーボール
     fireball : [{x : 1030, y : 0, width : 40, height : 40, exist : false}, {x : 1030, y : 0, width : 40, height : 40, exist : false}, {x : 1030, y : 0, width : 40, height : 40, exist : false}, {x : 1030, y : 0, width : 40, height : 40, exist : false}, {x : 1030, y : 0, width : 40, height : 40, exist : false}],
     // アイスボール初期位置
-    firstIceball : {x : -55, y : 0},
+    firstIceball : {x : -65, y : 0},
     // アイスボール
-    iceball : [{x : -55, y : 0, width : 45, height : 25, exist : false, right : true}, {x : -55, y : 0, width : 45, height : 25, exist : false, right : true}, {x : -55, y : 0, width : 45, height : 25, exist : false, right : true}, {x : -55, y : 0, width : 45, height : 25, exist : false, right : true}, {x : -55, y : 0, width : 45, height : 25, exist : false, right : true}],
+    iceball : [{x : -65, y : 0, width : 45, height : 25, exist : false, right : true}, {x : -65, y : 0, width : 45, height : 25, exist : false, right : true}, {x : -65, y : 0, width : 45, height : 25, exist : false, right : true}, {x : -65, y : 0, width : 45, height : 25, exist : false, right : true}, {x : -65, y : 0, width : 45, height : 25, exist : false, right : true}],
     // 重なり判定
     overlap : (obj1, obj2) => {
         for (let i = 0; i < 2; i++) {
@@ -186,9 +191,9 @@ const firstPosition = {
     // ファイヤーボール
     fireball : [{x : 1030, y : 0, width : 40, height : 40, exist : false}, {x : 1030, y : 0, width : 40, height : 40, exist : false}, {x : 1030, y : 0, width : 40, height : 40, exist : false}, {x : 1030, y : 0, width : 40, height : 40, exist : false}, {x : 1030, y : 0, width : 40, height : 40, exist : false}],
     // アイスボール初期位置
-    firstIceball : {x : -55, y : 0},
+    firstIceball : {x : -65, y : 0},
     // アイスボール
-    iceball : [{x : -55, y : 0, width : 45, height : 25, exist : false, right : true}, {x : -55, y : 0, width : 45, height : 25, exist : false, right : true}, {x : -55, y : 0, width : 45, height : 25, exist : false, right : true}, {x : -55, y : 0, width : 45, height : 25, exist : false, right : true}, {x : -55, y : 0, width : 45, height : 25, exist : false, right : true}],
+    iceball : [{x : -65, y : 0, width : 45, height : 25, exist : false, right : true}, {x : -65, y : 0, width : 45, height : 25, exist : false, right : true}, {x : -65, y : 0, width : 45, height : 25, exist : false, right : true}, {x : -65, y : 0, width : 45, height : 25, exist : false, right : true}, {x : -65, y : 0, width : 45, height : 25, exist : false, right : true}],
     // 重なり判定
     overlap : (obj1, obj2) => {
         for (let i = 0; i < 2; i++) {
@@ -838,8 +843,7 @@ iceballCoolTime = true;
 document.body.addEventListener('keydown', (event) => {
     if (event.code === 'KeyA') {
         moveLeft();
-        if (! position.sword.cut || position.player.right) {//position.player.image === 'image/キャラクター2右向き_切る.png') {
-            // position.player.image = 'image/キャラクター2左向き.png';
+        if (! position.sword.cut || position.player.right) {
             if(! position.player.damage){
                 position.player.image = 'image/プレイヤー_左向き.png';
             }
@@ -853,8 +857,7 @@ document.body.addEventListener('keydown', (event) => {
     }
     if (event.code === 'KeyD') {
         moveRight();
-        if (! position.sword.cut || ! position.player.right) {//position.player.image === 'image/キャラクター2左向き_切る.png') {
-            // position.player.image = 'image/キャラクター2右向き.png';
+        if (! position.sword.cut || ! position.player.right) {
             if(! position.player.damage){
                 position.player.image = 'image/プレイヤー_右向き.png';
             }
@@ -879,8 +882,7 @@ document.body.addEventListener('keydown', (event) => {
     }
     if (event.code === 'KeyM') {
         if(!position.sword.cut){
-        if(position.player.right) {//position.player.image === 'image/キャラクター2右向き.png') {
-            // position.player.image = 'image/キャラクター2右向き_切る.png';
+        if(position.player.right) {
             if(! position.player.damage){
                 position.player.image = 'image/プレイヤー_右向き.png';
             }
@@ -891,8 +893,7 @@ document.body.addEventListener('keydown', (event) => {
             position.player.right = true;
             position.sword.cut = true;
         }
-        else if(! position.player.right) {//position.player.image === 'image/キャラクター2左向き.png') {
-            // position.player.image = 'image/キャラクター2左向き_切る.png';
+        else if(! position.player.right) {
             if(! position.player.damage){
                 position.player.image = 'image/プレイヤー_左向き.png';
             }
@@ -903,40 +904,11 @@ document.body.addEventListener('keydown', (event) => {
             position.player.right = false;
             position.sword.cut = true;
         }
-
-       
-            setTimeout(() => {
-                // if (position.sword.cut) {
-                    if (position.sword.cut) {
-                        position.sword.cut = false;
-                        // switch (position.player.right) {
-                        //     case true
-                        //         position.player.image = 'image/キャラクター2右向き.png';
-                        //         position.sword.cut = false;
-                        //         break;
-                        //     case false:
-                        //         position.player.image = 'image/キャラクター2左向き.png';
-                        //         position.player.right = false;
-                        //         break;
-                        // }
-                    }
-                    // switch (position.player.image) {
-                    //     case 'image/キャラクター2右向き_切る.png':
-                    //         position.player.image = 'image/キャラクター2右向き.png';
-                    //         position.player.right = true;
-                    //         break;
-                    //     case 'image/キャラクター2左向き_切る.png':
-                    //         position.player.image = 'image/キャラクター2左向き.png';
-                    //         position.player.right = false;
-                    //         break;
-                    // }
-                // }
-                // else {
-                //     player.src = position.player.image;
-                // // }
-                // player.src = position.player.image;
-                // position.sword.cut = false;
-            }, 500);
+        setTimeout(() => {
+            if (position.sword.cut) {
+                position.sword.cut = false;
+            }
+        }, 500);
         }
     }
     if (event.code === 'KeyN') {
@@ -947,6 +919,116 @@ document.body.addEventListener('keydown', (event) => {
         }
     }
 });
+
+
+let intervalID_leftBotton;
+let intervalID_rightBotton;
+let intervalID_jumpBotton;
+let intervalID_swordBotton;
+let intervalID_iceBotton;
+
+
+leftBotton.addEventListener('mousedown', () => {
+    console.log('クリック');
+    intervalID_leftBotton = setInterval(() => {
+        console.log('インターバルクリック');
+        moveLeft();
+        if (! position.sword.cut || position.player.right) {
+            if(! position.player.damage){
+                position.player.image = 'image/プレイヤー_左向き.png';
+            }
+            else {
+                position.player.image = 'image/プレイヤー_左向き_ダメージ.png';
+            }
+            player.src = position.player.image;
+            position.player.right = false;
+            position.sword.cut = false;
+        }
+    }, 40);
+});
+
+rightBotton.addEventListener('mousedown', () => {
+    intervalID_rightBotton = setInterval(() => {
+        moveRight();
+        if (! position.sword.cut || ! position.player.right) {
+            if(! position.player.damage){
+                position.player.image = 'image/プレイヤー_右向き.png';
+            }
+            else {
+                position.player.image = 'image/プレイヤー_右向き_ダメージ.png';
+            }
+            player.src = position.player.image;
+            position.player.right = true;
+            position.sword.cut = false;
+        }
+    }, 40);
+});
+
+jumpBotton.addEventListener('mousedown', () => {
+    intervalID_jumpBotton = setInterval(() => {
+        if (doublejump2) {
+            v = 20;
+        }
+        jump = true;
+        if (doublejump1 && doublejump2) {
+            v = 15;
+            d_t = 0;
+            doublejump2 = false;
+        }
+    }, 40);
+});
+
+swordBotton.addEventListener('mousedown', () => {
+    intervalID_swordBotton = setInterval(() => {
+        if(!position.sword.cut){
+            if(position.player.right) {
+                if(! position.player.damage){
+                    position.player.image = 'image/プレイヤー_右向き.png';
+                }
+                else {
+                    position.player.image = 'image/プレイヤー_右向き_ダメージ.png';
+                }
+                player.src = position.player.image;
+                position.player.right = true;
+                position.sword.cut = true;
+            }
+            else if(! position.player.right) {
+                if(! position.player.damage){
+                    position.player.image = 'image/プレイヤー_左向き.png';
+                }
+                else {
+                    position.player.image = 'image/プレイヤー_左向き_ダメージ.png';
+                }
+                player.src = position.player.image;
+                position.player.right = false;
+                position.sword.cut = true;
+            }
+            setTimeout(() => {
+                if (position.sword.cut) {
+                    position.sword.cut = false;
+                }
+            }, 500);
+        }
+    }, 40);
+});
+
+iceBotton.addEventListener('mousedown', () => {
+    intervalID_iceBotton = setInterval(() => {
+        if (iceballCoolTime) {
+            iceballShot();
+            iceballCoolTime = false;
+            setTimeout(() => {iceballCoolTime = true}, 2000);
+        }
+    }, 40);
+});
+
+leftBotton.addEventListener('mouseup', () => {clearInterval(intervalID_leftBotton)});
+rightBotton.addEventListener('mouseup', () => {clearInterval(intervalID_rightBotton)});
+jumpBotton.addEventListener('mouseup', () => {clearInterval(intervalID_jumpBotton)});
+swordBotton.addEventListener('mouseup', () => {clearInterval(intervalID_swordBotton)});
+iceBotton.addEventListener('mouseup', () => {clearInterval(intervalID_iceBotton)});
+
+
 
 let finishGamePass = true;
 const finishGame = () => {
