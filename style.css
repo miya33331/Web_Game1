@@ -1,5 +1,9 @@
 @charset "UTF-8";
 
+html {
+    touch-action: manipulation;
+}
+
 #screen {
     position: relative;
     margin: 0 250px;
